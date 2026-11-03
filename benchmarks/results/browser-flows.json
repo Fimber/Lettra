@@ -1,0 +1,59 @@
+{
+  "smoke": {
+    "checks": [
+      "Desktop empty state",
+      "Real OCR on printed-page sample",
+      "Editable result and clipboard copy",
+      "Source-named text download",
+      "Original and exact cleaned image comparison",
+      "Preset rerun on retained image",
+      "Raw text remains available",
+      "Magic-byte file validation",
+      "15 MB size limit",
+      "Pixel limit checked before decoding",
+      "Dark image inversion and OCR",
+      "Paste image extraction",
+      "Offline reload and local extraction",
+      "Mobile layout has no horizontal overflow",
+      "No off-origin network requests during all extractions",
+      "No browser runtime errors"
+    ],
+    "external": [],
+    "errors": []
+  },
+  "extended-smoke": {
+    "checks": [
+      "Receipt adaptive threshold and line removal",
+      "Numbers-only recognition",
+      "Document preset with adaptive threshold and denoise",
+      "Best model runs locally",
+      "Classic engine runs locally",
+      "Original-image bypass",
+      "Crop selection and extraction",
+      "Rotation and extraction",
+      "Optional local history and deletion",
+      "Cancellation followed by a successful rerun",
+      "Blank image empty-result message",
+      "French language model"
+    ],
+    "errors": []
+  },
+  "workspace-smoke": {
+    "checks": [
+      "Compact workspace and keyboard/pointer resizing",
+      "Image zoom, drag-to-pan and fit",
+      "Button and keyboard undo/redo",
+      "Reruns preserve edits and rejected results leave them intact",
+      "Accepted reruns are undoable",
+      "Output cleanup previews changes and undo restores formatting",
+      "Declining numbers-only restores the original recognition mode",
+      "Word review shows source crop and bounding box, navigates and undoes corrections",
+      "Separate numeric review includes high-confidence amounts",
+      "Undo restores the matching image and text after rotation",
+      "Mobile settings sheet traps focus, closes with Escape, and sticky copy works without overflow",
+      "Cancel during image encoding preserves edits and the reader can rerun afterwards",
+      "No browser runtime errors"
+    ],
+    "errors": []
+  }
+}

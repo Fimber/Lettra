@@ -1,0 +1,2 @@
+benchmarks/references/*.txt -text
+benchmarks/*.json text eol=lf

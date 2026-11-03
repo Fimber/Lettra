@@ -47,6 +47,7 @@ import {
   Trash2,
 } from "lucide-react";
 import ReactCrop, { type Crop as CropArea } from "react-image-crop";
+import { downloadBlob } from "@/lib/download";
 import "react-image-crop/dist/ReactCrop.css";
 import {
   defaults,
@@ -543,14 +544,10 @@ export default function Home() {
     setShowRaw(false);
   }
   function download() {
-    const url = URL.createObjectURL(
+    downloadBlob(
       new Blob([shown], { type: "text/plain;charset=utf-8" }),
+      `${(doc.name || name).replace(/\.[^.]+$/, "") || "lettra"}.txt`,
     );
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${(doc.name || name).replace(/\.[^.]+$/, "") || "lettra"}.txt`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
     setToast("Text downloaded.");
   }
   function change<K extends keyof Settings>(key: K, value: Settings[K]) {
@@ -1322,7 +1319,8 @@ export default function Home() {
                 )}
                 {result.confidence < 60 && shown && (
                   <p className="warning-note">
-                    This result may contain errors. Try a different preset.
+                    This result may contain errors. Rotate sideways pages, crop
+                    one column at a time, or compare the original image.
                   </p>
                 )}
                 <div className="review-tools">
@@ -1914,12 +1912,17 @@ export default function Home() {
             <h3>A little heads-up</h3>
             <p>
               Handwriting, decorative fonts, blur, and glare can be difficult to
-              read. For columns or complex layouts, crop one section at a time.
+              read. Rotate sideways pages before reading. For columns or curved
+              pages, crop one section at a time and compare the original image.
               Always check important names and numbers.
             </p>
             <p>
               Keyboard shortcuts: <kbd>Ctrl / ⌘ + V</kbd> to paste an image.{" "}
               <kbd>Ctrl / ⌘ + Shift + C</kbd> to copy your result.
+            </p>
+            <p>
+              <a href="/device-check/">Run the device checks</a> to test
+              reading, cancellation and downloads on your phone.
             </p>
           </div>
         </Modal>

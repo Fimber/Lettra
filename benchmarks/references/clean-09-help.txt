@@ -1,0 +1,11 @@
+Finding a saved document
+
+Help centre / Files and folders
+
+Open the folder where you last saved the document. Sort the list by modification date, then look for the most recent version with the correct name.
+
+If several copies have similar names, open them one at a time and compare the first paragraph. Do not delete the older copies until you have confirmed which version contains your changes.
+
+You can also search for a distinctive phrase from the document. A short phrase is often more useful than a common word.
+
+Example filename: meeting-notes_2026-11-03.txt

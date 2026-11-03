@@ -1,0 +1,26 @@
+[
+  {
+    "name": "chrome",
+    "status": "passed",
+    "version": "156.0.8078.80",
+    "physicalPhone": false,
+    "checks": 7,
+    "errors": []
+  },
+  {
+    "name": "firefox",
+    "status": "passed",
+    "version": "157.0",
+    "physicalPhone": false,
+    "checks": 7,
+    "errors": []
+  },
+  {
+    "name": "webkit",
+    "status": "passed",
+    "version": "27.2",
+    "physicalPhone": false,
+    "checks": 7,
+    "errors": []
+  }
+]

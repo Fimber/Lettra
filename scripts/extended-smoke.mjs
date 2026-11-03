@@ -50,7 +50,7 @@ const run = async () => {
   await result();
 };
 try {
-  await page.goto("http://127.0.0.1:3000");
+  await page.goto(process.env.LETTRA_URL || "http://127.0.0.1:3000");
   await page.getByRole("button", { name: "Recent history" }).click();
   await page.getByLabel("Keep recent history").check();
   await page.getByRole("button", { name: "Close dialog" }).click();
@@ -109,7 +109,9 @@ try {
   await page.getByRole("button", { name: "Close dialog" }).click();
   check("Optional local history and deletion");
   await page.getByRole("button", { name: "Run again", exact: true }).click();
-  await page.getByRole("button", { name: "Cancel", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Cancel", exact: true })
+    .click({ force: true });
   await expect(page.locator(".working-state")).toHaveCount(0);
   await run();
   check("Cancellation followed by a successful rerun");

@@ -1,0 +1,19 @@
+Office supplies / order summary
+
+Invoice INV-2026-118 / Currency: USD
+
+Item                 Quantity    Unit price    Amount
+A4 paper             3           4.50          13.50
+Black ink            2           12.00         24.00
+Notebooks            5           3.75          18.75
+Delivery             1           6.00          6.00
+
+Subtotal                                      62.25
+Discount                                      -5.00
+Tax                                            4.29
+TOTAL                                         61.54
+
+Payment reference: 0018-2046-9031
+Payment due: 17/11/2026
+Please include the invoice reference with your payment.
+Contact the office if an item or quantity is incorrect.

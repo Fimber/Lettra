@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-11-03",
+  "method": "Visual transcription of the source images, with upstream region annotations available as provenance. No Lettra or other OCR output was used. Actual printed case, spelling, quantities and amounts are retained; rows are read left-to-right, then top-to-bottom.",
+  "conventions": [
+    "Whitespace between columns is represented by one space. Decorative rules, dot leaders, checkmarks, staple marks and punched holes are not text and are omitted.",
+    "Printed text inserted above the receipt by the dataset is included when visible. No handwritten text overlapping printed content is accepted.",
+    "Two original full-page scans have a fixed rectangular crop that excludes only exterior handwritten dataset IDs and blank paper. All printed receipt text is retained. Source JPEGs and crop geometry are preserved.",
+    "These are single-reviewer visual references, not independently double-annotated gold labels. Specific difficult glyphs are documented per receipt; scores should not imply precision beyond this reference quality."
+  ],
+  "selection": {
+    "initialIds": ["000", "073", "146", "219", "292", "365", "438", "511"],
+    "eligibility": "English/Latin-script printed main receipt, no unknown annotation regions in the main receipt and no handwritten text over printed receipt content. Exterior handwritten dataset IDs may be removed by a documented rectangular crop before any OCR scoring.",
+    "replacements": [{"from": "000", "to": "001", "reason": "000 includes Chinese lines recorded as unknown *** and handwritten text; 001 is the next eligible source."}],
+    "additionalCandidatesInspected": ["293", "294", "295", "296", "297", "439", "440", "441", "442", "443"],
+    "additionalCandidateOutcome": "All had handwritten dataset IDs; 294 also contains Chinese text, 440 has damaged footer text, and 442/443 include other documents. None was scored. Original 292/438 retained with documented crops after allowing removal of exterior dataset IDs."
+  },
+  "receipts": [
+    {
+      "id": "001",
+      "notes": ["The blue checkmark is omitted. Duplicate footer annotations in the upstream CSV are not repeated.", "Small faded glyphs in GF-TABLE LAMP/STITCH <i> and the M026588 member identifier are the reviewer's best visual reading; these are reference uncertainties. The printed word STITCH is retained rather than changed to SWITCH."],
+      "lines": ["tan woon yann", "INDAH GIFT & HOME DECO", "27,JALAN DEDAP 13,", "TAMAN JOHOR JAYA,", "81100 JOHOR BAHRU,JOHOR.", "Tel:07-3507405 Fax:07-3558160", "RECEIPT", "19/10/2018 20:49:59 #01", "Cashier: CN Location/SP: 05 /0531", "MB: M026588", "Room No: 01 050100035279", "Desc/Item Qty Price Amt(RM)", "ST-PRIVILEGE CARD/GD INDAH", "88888 1 10.00 10.00", "GF-TABLE LAMP/STITCH <i>", "62483 1 55.90 55.90", "@DISC 10.00% -5.59", "#Total Qty 2", "TOTAL AMT RM 60.31", "ROUNDING ADJ -0.01", "RM 60.30", "CASH RM 70.30", "CHANGE RM 10.00", "Thank You ! Please Come Again !", "Goods Sold Are Not Returnable", "Dealing In Wholesale And Retail."]
+    },
+    {
+      "id": "073",
+      "notes": ["Green checkmarks are omitted. The final enquiry line is vertically clipped in the source; the readable text is included, with the final semicolon supported by the upstream annotation. Address punctuation is small and slightly blurred.", "The printed date is 27/03/2018 and the printed tax code is SR @ A; the latter is not rewritten as a tax percentage."],
+      "lines": ["3180303", "LIAN HING STATIONERY SDN BHD", "(162761-M)", "NO.32 & 33,JALAN SR 1/9. SEKSYEN 9.", "TAMAN SERDANG RAYA,", "43300 SERI KEMBANGAN, SELANGOR", "DARUL EHSAN", "GST ID : 002139201536", "Tax Invoice", "27/03/2018 No.: CS-20242", "Qty Tax RM", "Dursfile H399 (110 x 95mm) 100 SR 58.30", "Name Badge (H) @ 0.5500", "809 Metal Name Badge Clip 1 SR 21.20", "- 100's @ 20.0000", "Total Amt Incl. GST @ 6%: 79.50", "Rounding Adjustment:", "Total Amt Payable: 79.50", "Paid Amount: 100.00", "Change: 20.50", "Total Qty Tender: 101", "GST Summary Amount Tax", "(RM) (RM)", "SR @ A 75.00 4.50", "Total 75.00 4.50", "THANK YOU", "For any enquiry, please contact us;"]
+    },
+    {
+      "id": "146",
+      "notes": ["Printed abbreviations and apparent typos are retained, including TTL ATF RND and N' LEMAK+fc. The subtotal 62.55 appears twice and both occurrences are included.", "The GST identifier uses wide tracking in the image; it is transcribed as a continuous identifier. Decorative dashes surrounding the closing timestamp are omitted."],
+      "lines": ["PappaRich BMC", "NO.19 & 21", "JALAN TEMENGGUNG 23/9", "BANDAR MAHKOTA CHERAS", "43200 SELANGOR DARUL EHSAN, MALAYSIA", "TAX INVOICE", "GST ID:000164270080", "2 COUNTER1 2003 saiful", "Chk 263370 Guest1", "24 Mar 18 09:12:41 PM", "TBL35 / 1", "1 D28 MILO DINO(I) E 7.45 S", "2 R03 N' LEMAK+fc E @17.83 35.66 S", "1 N22 SPRG NDL+su+cr E 9.34 S", "1 B02 HALF BL EGG E 4.53 S", "1 D19 CHAM (I) E 5.57 S", "CASH 73.00", "62.55", "Subtotal 62.55", "10% Srv Chg 6.25", "6% GST 4.13", "Total: 72.93", "RND ADJ 0.02", "TTL ATF RND 72.95", "Payment 73.00", "Change Due 0.05", "2003 CLOSED 24 Mar 18 09:58:26 PM", "THANK YOU! PLEASE COME AGAIN!", "PRICE IS GST INCLUSIVE", "GSTSummary Amount(RM) GST(RM)", "S=GST @6%: 68.82 4.13", "Z=GST @0%: 0.00 0.00"]
+    },
+    {
+      "id": "219",
+      "notes": ["Only the main white receipt is referenced. Partial text and handwritten fragments on the yellow background form at the right edge are excluded; the image itself remains unmodified, so OCR of those fragments can increase error.", "The faded word Inclusive and punctuation after DEPT are uncertain at single-glyph level; the chosen readings are Inclusive and DEPT::. Other body text and amounts were visually checked."],
+      "lines": ["PRINT EXPERT SDN BHD", "989625-A", "NO 18, 20, 22, JALAN BUNGA TANJONG 2/16,", "40000 SHAH ALAM, SELANGOR", "TEL 03-55250588", "FAX 03-55107309", "GST ID : 000886677504", "Doc No. SO00046284 DEPT::", "Cashier : USER Date: 12/01/2018", "Salesperson ATHIRAH Time: 16:32:00", "Description Qty Price Amount", "DESIGN 1 31.80 31.80", "FOAMBOARD 91X46CM 3 63.60 190.80", "DESIGN 2 31.80 63.60", "ROLLUP BUNTING 2 178.08 356.16", "DESIGN 1 31.80 31.80", "FLYERS 100 0.73 73.14", "DEPOSIT (CS00489793) 1 -647.30 -647.30", "Total Qty: 110", "Total Sales (Excluding GST) : 94.34", "Discount : 0.00", "Total GST : 5.66", "Rounding : 0.00", "Total Sales (Inclusive of GST) 100.00", "THANK YOU, HAVE A NICE DAY !"]
+    },
+    {
+      "id": "292",
+      "crop": {"left": 1500, "top": 1570, "width": 1650, "height": 2630},
+      "sourceDimensions": {"width": 4961, "height": 7016},
+      "notes": ["Crop excludes exterior handwritten dataset ID A04063 and blank paper; every printed receipt line is retained. Original source JPEG is also saved.", "The item-code prefix is capital I, followed by digits. The heading is transcribed as TAX INVOICE after checking the full-resolution crop."],
+      "lines": ["UNIHAKKA INTERNATIONAL SDN BHD", "16 Apr 2018 18:23", "(867388-U)", "12, Jalan Tampoi 7/4,Kawasan Perindustrian", "Tampoi,81200 Johor Bahru,Johor", "TAX INVOICE", "Invoice # : OR18041602170486", "Item Qty Total", "SR I00100000035- 1 Meat + 3 Vege", "$7.10 1 $7.10", "SR I00100000015- Vegetable", "$1.10 1 $1.10", "Total Amount: $8.20", "GST @6%: $0.46", "Nett Total: $8.20", "Payment Mode Amount", "CASH $8.20", "Change $0.00", "GST Summary Amount($) Tax($)", "SR = GST @6% 7.74 0.46", "GST REG #000656195584", "BAR WANG RICE@PERMAS JAYA", "(Price Inclusive Of GST)", "Thank You & Come Again!", "Like and Follow Us on Facebook!", "Facebook.com/BarWangRice"]
+    },
+    {
+      "id": "365",
+      "notes": ["The printed phrase on the basic of the is retained; it is not corrected to basis. Punched holes and decorative rules are omitted.", "The first two item unit prices are faint but readable. E.&.O.E. uses the letter O."],
+      "lines": ["GARDENIA BAKERIES (KL) SDN BHD (139386 X)", "Lot 3, Jalan Pelabur 23/1,", "40300 Shah Alam, Selangor.", "Tel: 03- 55423228 Fax:03- 55423213", "GST ID: 000381399040", "TAX INVOICE / ADJUSTMENT NOTE", "Cash Inv No.: 7022F710", "VE0514 Date: 22/10/2017", "MAKASSAR FRESH MARKET SDN BHD", "GROUND FLOOR, NO. 4 & 6,", "JALAN SS 15/4B,", "47500 SUBANG JAYA, SELANGOR", "VE05: Ridzuan (11900)", "DD: 22/10/2017 11:44", "Description U.P Iss Exc D Sale Amt(RM)", "O.C. WHITE 2.13 3 0 0 3 6.39", "WHOLEMEAL 2.78 3 1 0 2 5.56", "O.C JUMBO 2.97 3 5 0 -2 -5.94", "Total 0% supplies: 6.01", "TWIG-CHOC 1.33 20 0 0 20 26.60", "Total 6% supplies (excl. GST): 26.60", "GST: 1.60", "Total 6% supplies (Inc. GST): 28.20", "Total 0% supplies: 6.01", "Total Payable: 34.21", "E.&.O.E.", "Received above goods in good order condition.", "The recipient of Gardenia's products is", "required to make necessary adjustments to its", "input tax claims, on the basic of the", "adjustments shown in this Tax Invoice /", "Adjustment Note", "CUSTOMER'S COPY"]
+    },
+    {
+      "id": "438",
+      "crop": {"left": 1375, "top": 1570, "width": 1650, "height": 2850},
+      "sourceDimensions": {"width": 4961, "height": 7016},
+      "notes": ["Crop excludes exterior handwritten dataset ID A05138 and blank paper; every printed receipt line is retained. Original source JPEG is also saved.", "The item-code prefix is capital I, followed by digits. Rows are read across their tilted baselines rather than by absolute y-coordinate."],
+      "lines": ["UNIHAKKA INTERNATIONAL SDN BHD", "24 May 2018 18:29", "(867388-U)", "12, Jalan Tampoi 7/4,Kawasan Perindustrian", "Tampoi,81200 Johor Bahru,Johor", "TAX INVOICE", "Invoice # : OR18052402170329", "Item Qty Total", "SR I00100000025- 1 Meat + 2 Vege", "$6.00 1 $6.00", "SR I00100000170- Imported Veggies", "$1.60 1 $1.60", "SR I00100000149- Add Vegetable (X)", "$0.80 1 $0.80", "Total Amount: $8.40", "GST @6%: $0.48", "Nett Total: $8.40", "Payment Mode Amount", "CASH $8.40", "Change $0.00", "GST Summary Amount($) Tax($)", "SR = GST @6% 7.92 0.48", "GST REG #000656195584", "BAR WANG RICE@PERMAS JAYA", "(Price Inclusive Of GST)", "Thank You & Come Again!", "Like and Follow Us on Facebook!", "Facebook.com/BarWangRice"]
+    },
+    {
+      "id": "511",
+      "notes": ["Faded purple printing and a vertical fold are retained. The printed company-name line breaks are retained.", "Small digits in the GST ID and item code are visually checked and cross-checked against upstream annotations; they remain more difficult to read than the amounts."],
+      "lines": ["AIK HUAT HARDWARE", "ENTERPRISE (SETIA", "ALAM) SDN BHD", "822737-X", "NO. 17-G, JALAN SETIA INDAH", "(X) U13/X, SETIA ALAM,", "SEKSYEN U13, 40170 SHAH ALAM,", "TEL: 012 - 6651783 FAX: 03 - 33623608", "GST NO: 000394528768", "SIMPLIFIED TAX INVOICE", "CASH", "RECEIPT #: CSP0422870 DATE: 29/12/2017", "SALESPERSON : AH019 TIME: 14:30:00", "ITEM QTY U/P AMOUNT", "(RM) (RM)", "4060010002913 2 3.50 7.00 S", "UMS 13A SWITCH SOCKET(PC-2913A)", "TOTAL QUANTITY 2", "SUB-TOTAL (GST) 7.00", "DISC 0.00", "ROUNDING 0.00", "TOTAL 7.00", "CASH 50.00", "CHANGE 43.00", "*GST @ 6% INCLUDED IN TOTAL", "GST SUMMARY", "CODE AMOUNT % TAX/AMT", "SR 6.60 6 0.40", "TAX TOTAL: 0.40", "GOODS SOLD ARE NOT REFUNDABLE,", "THANK YOU FOR CHOOSING US.", "PLS PROVIDE ORIGINAL BILL FOR GOODS", "EXCHANGE WITHIN 1 WEEK FROM TRANSACTION", "GOODS MUST BE IN ORIGINAL STATE TO BE", "ENTITLED FOR EXCHANGE."]
+    }
+  ]
+}

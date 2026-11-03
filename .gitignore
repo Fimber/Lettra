@@ -6,3 +6,4 @@ out/
 *.tar.gz
 *.tar
 test-results/
+benchmark-data/

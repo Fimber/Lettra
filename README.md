@@ -26,6 +26,7 @@ The production preview is recommended for OCR and offline tests because it inclu
 - Preserve formatting, Clean paragraphs and Numbers only output modes, raw output, custom rule-based cleanup, copy/keyboard shortcuts, source-named TXT downloads and counts. Changes that merge words invalidate ambiguous review anchors instead of highlighting a different occurrence.
 - Optional local history (off by default), bounded to ten text results; disabling clears history. Images are never persisted by the app.
 - Local static assets and language packs, same-origin network CSP, service-worker asset caching for offline use after the first successful read. No content is sent in requests.
+- `/device-check/`: local device diagnostics with downloadable JSON, automatic sample checks, cancellation/recovery and optional camera timing. Physical-device and hands-on confirmations are explicit; desktop runs remain labeled as desktop.
 
 ## Project map
 
@@ -49,17 +50,24 @@ node scripts/smoke.mjs
 node scripts/extended-smoke.mjs
 node scripts/workspace-smoke.mjs
 npm run benchmark -- ./your-test-images
+node scripts/accuracy-benchmark.mjs benchmarks/corpus.json test-results/accuracy
+node scripts/cross-browser-smoke.mjs
+node scripts/device-check-smoke.mjs
 ```
 
 The smoke suites exercise real local OCR, paste, editable output, clipboard, TXT download, preprocessing reruns, file validation, offline extraction, mobile layout and an off-origin network assertion. Workspace checks exercise comparison, undo/redo, precise word correction, numeric review, resizing, zoom/pan, cancellation and mobile keyboard focus. Reports and screenshots go in `test-results/` (ignored by Git). The benchmark harness runs every image through every preset and writes CER, WER, number-token error rate, exact numeric match, reader score and elapsed time to CSV. Supply images with same-stem UTF-8 `.txt` ground truths. Whitespace is normalized for CER/WER; punctuation and case are preserved. Number tokens are compared in order, counting substitutions, omissions and insertions; this is a transcription metric, not a guarantee of semantic correctness.
 
 ## Validation boundaries
 
-The product document's 50-image real-world corpus and real iPhone/Android/Safari/Firefox device matrix are not included. The three generated samples are smoke fixtures, not evidence for the specified real-world accuracy targets. Those targets require a representative, manually transcribed corpus. HEIC support depends on the decoder supporting the source codec; unreadable files return an error without upload. The complete OpenCV build is intentionally lazy-loaded; the initial reader download may exceed the document's 8 MB budget. A custom OpenCV build is the next download-size optimization.
+A frozen 50-image corpus and measured before/after results are documented in [benchmarks/REPORT.md](benchmarks/REPORT.md). It combines 27 controlled screenshot/poster/language renders, eight real scanned receipts and 15 real camera photographs. The photographs are a narrow, difficult Federal Register set from one Huawei model; this is a tuning corpus, not an independent held-out accuracy certification. References were authored or visually checked against independent native sources before OCR. Images and transcripts have fixed hashes. Raw source images/PDFs are ignored by Git and are not deployed; the report explains reproduction.
+
+Desktop Chrome, Firefox and WebKit checks do not establish physical iPhone or Android support. No connected phone or device-cloud account was available; real-phone camera, memory, keyboard, repeated-load and timing checks remain not run. Open `/device-check/` on an actual phone to complete them. The three built-in samples are smoke fixtures, separate from the 50-image corpus. Complex warped or sideways camera pages still need rotation, cropping and careful review; the report records unmet accuracy targets.
+
+HEIC support depends on the decoder supporting the source codec; unreadable files return an error without upload. The complete OpenCV build is intentionally lazy-loaded; OpenCV alone is 13.3 MB before HTTP compression. The compressed first-read transfer budget of 8 MB has not been verified. A custom OpenCV build remains the download-size optimization.
 
 PDFs, batch extraction, translation, structured exports and accounts remain outside this MVP. Handwriting and highly decorative fonts are not reliable. User history and offline caches are subject to browser storage limits.
 
-Observed accuracy limitation: the Fast reader can confuse `0` and `8` in the generated monospace receipt, even with high aggregate confidence. The review highlights and editable result are important; do not treat the confidence score as proof that an amount is correct. Use the supplied benchmark harness to tune against real receipts before asserting the document's accuracy targets.
+Observed accuracy limitation: the Fast reader can confuse digits even with high aggregate confidence, and every real receipt in the baseline contained at least one numeric-token mismatch. The review highlights and editable result are important; do not treat the reader score as proof that an amount is correct. Check all important names and numbers.
 
 ## Deployment
 

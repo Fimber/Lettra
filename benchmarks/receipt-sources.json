@@ -1,0 +1,312 @@
+[
+  {
+    "id": "sroie-001",
+    "category": "receipts",
+    "lang": "eng",
+    "image": "benchmark-data/receipts/sroie-001.jpg",
+    "truth": "benchmark-data/receipts/sroie-001.txt",
+    "imageSha256": "4e7bb7f427732e769eafc6f6eed5a92eedccf96bc0c711f46466462b98916c73",
+    "truthSha256": "5860ec0e8e2f238eb553127023146b99d8141bf39706fdcd6263ef999a83889f",
+    "source": {
+      "type": "real-scanned-receipt",
+      "imageUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/img/001.jpg",
+      "annotationUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/box/001.csv",
+      "commit": "27be4271b251c256f695acbade9a801bffe85994",
+      "originalPath": "benchmark-data/receipts/sroie-001.jpg",
+      "originalSha256": "4e7bb7f427732e769eafc6f6eed5a92eedccf96bc0c711f46466462b98916c73",
+      "annotationSha256": "280229706c7b18f056d4e277f820b0b6d52cac5e53a540b54f85b0645cc6fb47",
+      "sourceDimensions": {
+        "width": 439,
+        "height": 1004
+      },
+      "transcript": "Visually reviewed actual-case reference; row order is left-to-right then top-to-bottom",
+      "referenceOverrides": "benchmarks/receipt-reference-overrides.json",
+      "reviewDate": "2026-11-03",
+      "referenceMethod": "Visual transcription of the source images, with upstream region annotations available as provenance. No Lettra or other OCR output was used. Actual printed case, spelling, quantities and amounts are retained; rows are read left-to-right, then top-to-bottom.",
+      "referenceConventions": [
+        "Whitespace between columns is represented by one space. Decorative rules, dot leaders, checkmarks, staple marks and punched holes are not text and are omitted.",
+        "Printed text inserted above the receipt by the dataset is included when visible. No handwritten text overlapping printed content is accepted.",
+        "Two original full-page scans have a fixed rectangular crop that excludes only exterior handwritten dataset IDs and blank paper. All printed receipt text is retained. Source JPEGs and crop geometry are preserved.",
+        "These are single-reviewer visual references, not independently double-annotated gold labels. Specific difficult glyphs are documented per receipt; scores should not imply precision beyond this reference quality."
+      ],
+      "notes": [
+        "The blue checkmark is omitted. Duplicate footer annotations in the upstream CSV are not repeated.",
+        "Small faded glyphs in GF-TABLE LAMP/STITCH <i> and the M026588 member identifier are the reviewer's best visual reading; these are reference uncertainties. The printed word STITCH is retained rather than changed to SWITCH."
+      ]
+    }
+  },
+  {
+    "id": "sroie-073",
+    "category": "receipts",
+    "lang": "eng",
+    "image": "benchmark-data/receipts/sroie-073.jpg",
+    "truth": "benchmark-data/receipts/sroie-073.txt",
+    "imageSha256": "472f3f2e8be49ce33edee8a09d44932426fc2cfcd2fa4b50d2dd078b40a0454f",
+    "truthSha256": "4fc795161b78f2a4dd4cecfd4a091a780e2e9daef46d5bd12559ac7678feaab7",
+    "source": {
+      "type": "real-scanned-receipt",
+      "imageUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/img/073.jpg",
+      "annotationUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/box/073.csv",
+      "commit": "27be4271b251c256f695acbade9a801bffe85994",
+      "originalPath": "benchmark-data/receipts/sroie-073.jpg",
+      "originalSha256": "472f3f2e8be49ce33edee8a09d44932426fc2cfcd2fa4b50d2dd078b40a0454f",
+      "annotationSha256": "60d04815a50bed5ffc297055e11072dec972673350a94d5b518580ee1e122a9b",
+      "sourceDimensions": {
+        "width": 615,
+        "height": 931
+      },
+      "transcript": "Visually reviewed actual-case reference; row order is left-to-right then top-to-bottom",
+      "referenceOverrides": "benchmarks/receipt-reference-overrides.json",
+      "reviewDate": "2026-11-03",
+      "referenceMethod": "Visual transcription of the source images, with upstream region annotations available as provenance. No Lettra or other OCR output was used. Actual printed case, spelling, quantities and amounts are retained; rows are read left-to-right, then top-to-bottom.",
+      "referenceConventions": [
+        "Whitespace between columns is represented by one space. Decorative rules, dot leaders, checkmarks, staple marks and punched holes are not text and are omitted.",
+        "Printed text inserted above the receipt by the dataset is included when visible. No handwritten text overlapping printed content is accepted.",
+        "Two original full-page scans have a fixed rectangular crop that excludes only exterior handwritten dataset IDs and blank paper. All printed receipt text is retained. Source JPEGs and crop geometry are preserved.",
+        "These are single-reviewer visual references, not independently double-annotated gold labels. Specific difficult glyphs are documented per receipt; scores should not imply precision beyond this reference quality."
+      ],
+      "notes": [
+        "Green checkmarks are omitted. The final enquiry line is vertically clipped in the source; the readable text is included, with the final semicolon supported by the upstream annotation. Address punctuation is small and slightly blurred.",
+        "The printed date is 27/03/2018 and the printed tax code is SR @ A; the latter is not rewritten as a tax percentage."
+      ]
+    }
+  },
+  {
+    "id": "sroie-146",
+    "category": "receipts",
+    "lang": "eng",
+    "image": "benchmark-data/receipts/sroie-146.jpg",
+    "truth": "benchmark-data/receipts/sroie-146.txt",
+    "imageSha256": "f474cab8f1f8db739dbbd0a9f4bfdf5a6904ccb9358510bfefbb479f5989dbda",
+    "truthSha256": "2723ca2ae6ea4cc5c15df57d302ccfc861cca146858d461f99f0fe9622b6953a",
+    "source": {
+      "type": "real-scanned-receipt",
+      "imageUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/img/146.jpg",
+      "annotationUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/box/146.csv",
+      "commit": "27be4271b251c256f695acbade9a801bffe85994",
+      "originalPath": "benchmark-data/receipts/sroie-146.jpg",
+      "originalSha256": "f474cab8f1f8db739dbbd0a9f4bfdf5a6904ccb9358510bfefbb479f5989dbda",
+      "annotationSha256": "ca12b11f7d695eedb3c93c5a6fb1c919ad8344056273d84f833363dc1863f24f",
+      "sourceDimensions": {
+        "width": 936,
+        "height": 2283
+      },
+      "transcript": "Visually reviewed actual-case reference; row order is left-to-right then top-to-bottom",
+      "referenceOverrides": "benchmarks/receipt-reference-overrides.json",
+      "reviewDate": "2026-11-03",
+      "referenceMethod": "Visual transcription of the source images, with upstream region annotations available as provenance. No Lettra or other OCR output was used. Actual printed case, spelling, quantities and amounts are retained; rows are read left-to-right, then top-to-bottom.",
+      "referenceConventions": [
+        "Whitespace between columns is represented by one space. Decorative rules, dot leaders, checkmarks, staple marks and punched holes are not text and are omitted.",
+        "Printed text inserted above the receipt by the dataset is included when visible. No handwritten text overlapping printed content is accepted.",
+        "Two original full-page scans have a fixed rectangular crop that excludes only exterior handwritten dataset IDs and blank paper. All printed receipt text is retained. Source JPEGs and crop geometry are preserved.",
+        "These are single-reviewer visual references, not independently double-annotated gold labels. Specific difficult glyphs are documented per receipt; scores should not imply precision beyond this reference quality."
+      ],
+      "notes": [
+        "Printed abbreviations and apparent typos are retained, including TTL ATF RND and N' LEMAK+fc. The subtotal 62.55 appears twice and both occurrences are included.",
+        "The GST identifier uses wide tracking in the image; it is transcribed as a continuous identifier. Decorative dashes surrounding the closing timestamp are omitted."
+      ]
+    }
+  },
+  {
+    "id": "sroie-219",
+    "category": "receipts",
+    "lang": "eng",
+    "image": "benchmark-data/receipts/sroie-219.jpg",
+    "truth": "benchmark-data/receipts/sroie-219.txt",
+    "imageSha256": "bcd1d2861b332f2fb2e9a03d856d78a362d204ca1ba7d577fa7dab076ec1dc87",
+    "truthSha256": "4f572f230acf770da474c1472cce79e95d9ff590d237d5e37b80c18bcb2176ad",
+    "source": {
+      "type": "real-scanned-receipt",
+      "imageUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/img/219.jpg",
+      "annotationUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/box/219.csv",
+      "commit": "27be4271b251c256f695acbade9a801bffe85994",
+      "originalPath": "benchmark-data/receipts/sroie-219.jpg",
+      "originalSha256": "bcd1d2861b332f2fb2e9a03d856d78a362d204ca1ba7d577fa7dab076ec1dc87",
+      "annotationSha256": "f2720b7304509ea2997406185144392d18b0c147525114bcbb91088d9d32b840",
+      "sourceDimensions": {
+        "width": 813,
+        "height": 1337
+      },
+      "transcript": "Visually reviewed actual-case reference; row order is left-to-right then top-to-bottom",
+      "referenceOverrides": "benchmarks/receipt-reference-overrides.json",
+      "reviewDate": "2026-11-03",
+      "referenceMethod": "Visual transcription of the source images, with upstream region annotations available as provenance. No Lettra or other OCR output was used. Actual printed case, spelling, quantities and amounts are retained; rows are read left-to-right, then top-to-bottom.",
+      "referenceConventions": [
+        "Whitespace between columns is represented by one space. Decorative rules, dot leaders, checkmarks, staple marks and punched holes are not text and are omitted.",
+        "Printed text inserted above the receipt by the dataset is included when visible. No handwritten text overlapping printed content is accepted.",
+        "Two original full-page scans have a fixed rectangular crop that excludes only exterior handwritten dataset IDs and blank paper. All printed receipt text is retained. Source JPEGs and crop geometry are preserved.",
+        "These are single-reviewer visual references, not independently double-annotated gold labels. Specific difficult glyphs are documented per receipt; scores should not imply precision beyond this reference quality."
+      ],
+      "notes": [
+        "Only the main white receipt is referenced. Partial text and handwritten fragments on the yellow background form at the right edge are excluded; the image itself remains unmodified, so OCR of those fragments can increase error.",
+        "The faded word Inclusive and punctuation after DEPT are uncertain at single-glyph level; the chosen readings are Inclusive and DEPT::. Other body text and amounts were visually checked."
+      ]
+    }
+  },
+  {
+    "id": "sroie-292",
+    "category": "receipts",
+    "lang": "eng",
+    "image": "benchmark-data/receipts/sroie-292-printed-crop.png",
+    "truth": "benchmark-data/receipts/sroie-292.txt",
+    "imageSha256": "3bd834692ce474485f33dd507e76b63ea410c43e3f01d281c5dc35ed95636932",
+    "truthSha256": "b08fef158ef9fddbb25dfe1d5e98987458b08285d9438ecf9bdcc20dd4a3b778",
+    "source": {
+      "type": "cropped-real-scanned-receipt",
+      "imageUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/img/292.jpg",
+      "annotationUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/box/292.csv",
+      "commit": "27be4271b251c256f695acbade9a801bffe85994",
+      "originalPath": "benchmark-data/receipts/sroie-292.jpg",
+      "originalSha256": "95613d997467df067cfd6a271492f7c416a8d5e8b93e154de719b5f1fc0fc9c6",
+      "annotationSha256": "abb67f631c995cafa27685863c14749c99fb677819675881357be2130205fc6c",
+      "sourceDimensions": {
+        "width": 4961,
+        "height": 7016
+      },
+      "crop": {
+        "left": 1500,
+        "top": 1570,
+        "width": 1650,
+        "height": 2630
+      },
+      "outputDimensions": {
+        "width": 1650,
+        "height": 2630
+      },
+      "cropLibrary": "sharp 0.35.5",
+      "transcript": "Visually reviewed actual-case reference; row order is left-to-right then top-to-bottom",
+      "referenceOverrides": "benchmarks/receipt-reference-overrides.json",
+      "reviewDate": "2026-11-03",
+      "referenceMethod": "Visual transcription of the source images, with upstream region annotations available as provenance. No Lettra or other OCR output was used. Actual printed case, spelling, quantities and amounts are retained; rows are read left-to-right, then top-to-bottom.",
+      "referenceConventions": [
+        "Whitespace between columns is represented by one space. Decorative rules, dot leaders, checkmarks, staple marks and punched holes are not text and are omitted.",
+        "Printed text inserted above the receipt by the dataset is included when visible. No handwritten text overlapping printed content is accepted.",
+        "Two original full-page scans have a fixed rectangular crop that excludes only exterior handwritten dataset IDs and blank paper. All printed receipt text is retained. Source JPEGs and crop geometry are preserved.",
+        "These are single-reviewer visual references, not independently double-annotated gold labels. Specific difficult glyphs are documented per receipt; scores should not imply precision beyond this reference quality."
+      ],
+      "notes": [
+        "Crop excludes exterior handwritten dataset ID A04063 and blank paper; every printed receipt line is retained. Original source JPEG is also saved.",
+        "The item-code prefix is capital I, followed by digits. The heading is transcribed as TAX INVOICE after checking the full-resolution crop."
+      ]
+    }
+  },
+  {
+    "id": "sroie-365",
+    "category": "receipts",
+    "lang": "eng",
+    "image": "benchmark-data/receipts/sroie-365.jpg",
+    "truth": "benchmark-data/receipts/sroie-365.txt",
+    "imageSha256": "3b63dc6f6ed4dffbb327e5b0186e1e5ba04be6d78c84eb7c04ee2025231e2788",
+    "truthSha256": "d40cdcdce3ab8ee699916ea9eed569d0c0d5ff746bfd5dca2eab323218afdebb",
+    "source": {
+      "type": "real-scanned-receipt",
+      "imageUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/img/365.jpg",
+      "annotationUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/box/365.csv",
+      "commit": "27be4271b251c256f695acbade9a801bffe85994",
+      "originalPath": "benchmark-data/receipts/sroie-365.jpg",
+      "originalSha256": "3b63dc6f6ed4dffbb327e5b0186e1e5ba04be6d78c84eb7c04ee2025231e2788",
+      "annotationSha256": "031d11355ee7cb8dd7c6ccde71799314062f4000ba550f00d8222fb4d377adc9",
+      "sourceDimensions": {
+        "width": 620,
+        "height": 1176
+      },
+      "transcript": "Visually reviewed actual-case reference; row order is left-to-right then top-to-bottom",
+      "referenceOverrides": "benchmarks/receipt-reference-overrides.json",
+      "reviewDate": "2026-11-03",
+      "referenceMethod": "Visual transcription of the source images, with upstream region annotations available as provenance. No Lettra or other OCR output was used. Actual printed case, spelling, quantities and amounts are retained; rows are read left-to-right, then top-to-bottom.",
+      "referenceConventions": [
+        "Whitespace between columns is represented by one space. Decorative rules, dot leaders, checkmarks, staple marks and punched holes are not text and are omitted.",
+        "Printed text inserted above the receipt by the dataset is included when visible. No handwritten text overlapping printed content is accepted.",
+        "Two original full-page scans have a fixed rectangular crop that excludes only exterior handwritten dataset IDs and blank paper. All printed receipt text is retained. Source JPEGs and crop geometry are preserved.",
+        "These are single-reviewer visual references, not independently double-annotated gold labels. Specific difficult glyphs are documented per receipt; scores should not imply precision beyond this reference quality."
+      ],
+      "notes": [
+        "The printed phrase on the basic of the is retained; it is not corrected to basis. Punched holes and decorative rules are omitted.",
+        "The first two item unit prices are faint but readable. E.&.O.E. uses the letter O."
+      ]
+    }
+  },
+  {
+    "id": "sroie-438",
+    "category": "receipts",
+    "lang": "eng",
+    "image": "benchmark-data/receipts/sroie-438-printed-crop.png",
+    "truth": "benchmark-data/receipts/sroie-438.txt",
+    "imageSha256": "648a44a620a5433607b5e0e28d18cc17534d8e13a097df194b71f2bdfe92963c",
+    "truthSha256": "59b522a5cba4dae3a8d875b3734f317ac066b2260ae585deece603bec004189c",
+    "source": {
+      "type": "cropped-real-scanned-receipt",
+      "imageUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/img/438.jpg",
+      "annotationUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/box/438.csv",
+      "commit": "27be4271b251c256f695acbade9a801bffe85994",
+      "originalPath": "benchmark-data/receipts/sroie-438.jpg",
+      "originalSha256": "adbc560c4ab9c8d7a34ce2f4e949df618932b5dd76347ed2edbde5ec12375e05",
+      "annotationSha256": "ee3057a7d91f6a018e18e168003aa14422e3e0299ac56b6dbdd023522f924daa",
+      "sourceDimensions": {
+        "width": 4961,
+        "height": 7016
+      },
+      "crop": {
+        "left": 1375,
+        "top": 1570,
+        "width": 1650,
+        "height": 2850
+      },
+      "outputDimensions": {
+        "width": 1650,
+        "height": 2850
+      },
+      "cropLibrary": "sharp 0.35.5",
+      "transcript": "Visually reviewed actual-case reference; row order is left-to-right then top-to-bottom",
+      "referenceOverrides": "benchmarks/receipt-reference-overrides.json",
+      "reviewDate": "2026-11-03",
+      "referenceMethod": "Visual transcription of the source images, with upstream region annotations available as provenance. No Lettra or other OCR output was used. Actual printed case, spelling, quantities and amounts are retained; rows are read left-to-right, then top-to-bottom.",
+      "referenceConventions": [
+        "Whitespace between columns is represented by one space. Decorative rules, dot leaders, checkmarks, staple marks and punched holes are not text and are omitted.",
+        "Printed text inserted above the receipt by the dataset is included when visible. No handwritten text overlapping printed content is accepted.",
+        "Two original full-page scans have a fixed rectangular crop that excludes only exterior handwritten dataset IDs and blank paper. All printed receipt text is retained. Source JPEGs and crop geometry are preserved.",
+        "These are single-reviewer visual references, not independently double-annotated gold labels. Specific difficult glyphs are documented per receipt; scores should not imply precision beyond this reference quality."
+      ],
+      "notes": [
+        "Crop excludes exterior handwritten dataset ID A05138 and blank paper; every printed receipt line is retained. Original source JPEG is also saved.",
+        "The item-code prefix is capital I, followed by digits. Rows are read across their tilted baselines rather than by absolute y-coordinate."
+      ]
+    }
+  },
+  {
+    "id": "sroie-511",
+    "category": "receipts",
+    "lang": "eng",
+    "image": "benchmark-data/receipts/sroie-511.jpg",
+    "truth": "benchmark-data/receipts/sroie-511.txt",
+    "imageSha256": "e1d7733e618ae2ca661d70d4d9f5567ee469af84f589aa712d2eb2fd0b08b23a",
+    "truthSha256": "d8656d981ede75ae249b58bfec7a8aa56edd870252ebc674125b7ee8e16f1c59",
+    "source": {
+      "type": "real-scanned-receipt",
+      "imageUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/img/511.jpg",
+      "annotationUrl": "https://raw.githubusercontent.com/zzzDavid/ICDAR-2019-SROIE/27be4271b251c256f695acbade9a801bffe85994/data/box/511.csv",
+      "commit": "27be4271b251c256f695acbade9a801bffe85994",
+      "originalPath": "benchmark-data/receipts/sroie-511.jpg",
+      "originalSha256": "e1d7733e618ae2ca661d70d4d9f5567ee469af84f589aa712d2eb2fd0b08b23a",
+      "annotationSha256": "aff5e8a75780cdee7a18944ff44787ea419a576da77cc35bb5f677a27702c88c",
+      "sourceDimensions": {
+        "width": 587,
+        "height": 1783
+      },
+      "transcript": "Visually reviewed actual-case reference; row order is left-to-right then top-to-bottom",
+      "referenceOverrides": "benchmarks/receipt-reference-overrides.json",
+      "reviewDate": "2026-11-03",
+      "referenceMethod": "Visual transcription of the source images, with upstream region annotations available as provenance. No Lettra or other OCR output was used. Actual printed case, spelling, quantities and amounts are retained; rows are read left-to-right, then top-to-bottom.",
+      "referenceConventions": [
+        "Whitespace between columns is represented by one space. Decorative rules, dot leaders, checkmarks, staple marks and punched holes are not text and are omitted.",
+        "Printed text inserted above the receipt by the dataset is included when visible. No handwritten text overlapping printed content is accepted.",
+        "Two original full-page scans have a fixed rectangular crop that excludes only exterior handwritten dataset IDs and blank paper. All printed receipt text is retained. Source JPEGs and crop geometry are preserved.",
+        "These are single-reviewer visual references, not independently double-annotated gold labels. Specific difficult glyphs are documented per receipt; scores should not imply precision beyond this reference quality."
+      ],
+      "notes": [
+        "Faded purple printing and a vertical fold are retained. The printed company-name line breaks are retained.",
+        "Small digits in the GST ID and item code are visually checked and cross-checked against upstream annotations; they remain more difficult to read than the amounts."
+      ]
+    }
+  }
+]

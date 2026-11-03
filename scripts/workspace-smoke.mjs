@@ -36,7 +36,7 @@ const run = async () => {
 };
 await mkdir("test-results", { recursive: true });
 try {
-  await page.goto("http://127.0.0.1:3000");
+  await page.goto(process.env.LETTRA_URL || "http://127.0.0.1:3000");
   await page.getByRole("button", { name: "A printed page" }).click();
   await settled();
   const original = await editor().inputValue();

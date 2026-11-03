@@ -1,7 +1,8 @@
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
-const root = resolve("out");
+const root = resolve(process.env.LETTRA_STATIC_DIR || "out");
+const port = Number(process.env.LETTRA_PORT || 3000);
 const mime = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript",
@@ -30,4 +31,6 @@ createServer(async (req, res) => {
     res.statusCode = 404;
     res.end("Not found");
   }
-}).listen(3000, "127.0.0.1", () => console.log("Local: http://127.0.0.1:3000"));
+}).listen(port, "127.0.0.1", () =>
+  console.log(`Local: http://127.0.0.1:${port}`),
+);

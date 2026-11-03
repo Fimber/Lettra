@@ -1,0 +1,24 @@
+receipt.ts
+
+Local project / source preview
+
+type Item = { name: string; price: number; quantity: number };
+
+const items: Item[] = [
+  { name: "Paper", price: 4.50, quantity: 2 },
+  { name: "Ink", price: 12.00, quantity: 1 },
+];
+
+export function subtotal(lines: Item[]): number {
+  return lines.reduce((sum, item) => {
+    return sum + item.price * item.quantity;
+  }, 0);
+}
+
+const total = subtotal(items);
+if (total >= 20 && items.length > 0) {
+  console.log(`Total: ${total.toFixed(2)}`);
+}
+
+// Preserve punctuation, underscores, braces and decimal points.
+const order_id = "ORD-2026-0118";

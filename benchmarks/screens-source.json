@@ -1,0 +1,147 @@
+{
+  "version": 1,
+  "purpose": "Controlled screenshot and slide fixtures for Lettra's 50-image accuracy benchmark",
+  "provenance": "Original text authored independently of OCR, rendered as local HTML in installed Chrome. These are controlled browser screenshots, not camera photographs or captured third-party apps.",
+  "limits": [
+    "The seven signs/posters/slides cases are controlled posters and slides, not photographed street signs.",
+    "The non-English group uses French, Yoruba, Spanish, German and Portuguese. German and Portuguese replace the product brief's Igbo and Hausa because those models are not bundled.",
+    "No OCR output was used to create or correct the reference transcripts."
+  ],
+  "fixtures": [
+    {
+      "id": "clean-01-article", "category": "clean_screenshots", "lang": "eng", "template": "article", "font": "Georgia", "size": 23, "width": 1440, "height": 960,
+      "title": "A quieter way to work", "subtitle": "FIELD JOURNAL / 03 NOVEMBER 2026",
+      "text": "A useful workspace makes the next action easy to see. Keep the document close, leave room for notes, and put the tools you use most often within reach.\n\nBefore starting a long task, write down the result you need. A small, concrete target is easier to check than a vague promise to make progress.\n\nAt the end of the session, save your changes and leave one sentence explaining what comes next. Tomorrow's work can begin with that sentence."
+    },
+    {
+      "id": "clean-02-letter", "category": "clean_screenshots", "lang": "eng", "template": "document", "font": "Georgia", "size": 22, "width": 1280, "height": 960,
+      "title": "Delivery instructions", "subtitle": "Reference: LTR-2048 / 3 November 2026",
+      "text": "Dear delivery team,\n\nPlease bring the six sealed boxes to the reception desk on the ground floor. The building opens at 08:30 and closes at 17:00. Use the entrance beside the blue gate.\n\nBox 4 contains glass samples. Keep it upright and do not place heavier cartons on top of it. Ask the recipient to inspect the seals before signing.\n\nIf the office is closed, call 0800 234 5678. Please do not leave the delivery outside.\n\nThank you for your help."
+    },
+    {
+      "id": "clean-03-chat", "category": "clean_screenshots", "lang": "eng", "template": "chat", "font": "Arial", "size": 21, "width": 1280, "height": 900,
+      "title": "Workshop planning", "subtitle": "Team conversation / Tuesday",
+      "text": "Maya, 09:12: Can we move the workshop to Room 3? The projector in Room 1 is being repaired.\n\nJon, 09:14: Yes. I will update the invitation and leave a note at the old room.\n\nMaya, 09:16: Thanks. Please keep the start time at 10:30 and bring twelve printed handouts.\n\nAda, 09:18: I have the handouts ready. There are two spare copies in the green folder.\n\nJon, 09:20: Updated. The invitation now says Room 3, second floor."
+    },
+    {
+      "id": "clean-04-code", "category": "clean_screenshots", "lang": "eng", "template": "code", "font": "Consolas", "size": 18, "width": 1440, "height": 900,
+      "title": "receipt.ts", "subtitle": "Local project / source preview",
+      "text": "type Item = { name: string; price: number; quantity: number };\n\nconst items: Item[] = [\n  { name: \"Paper\", price: 4.50, quantity: 2 },\n  { name: \"Ink\", price: 12.00, quantity: 1 },\n];\n\nexport function subtotal(lines: Item[]): number {\n  return lines.reduce((sum, item) => {\n    return sum + item.price * item.quantity;\n  }, 0);\n}\n\nconst total = subtotal(items);\nif (total >= 20 && items.length > 0) {\n  console.log(`Total: ${total.toFixed(2)}`);\n}\n\n// Preserve punctuation, underscores, braces and decimal points.\nconst order_id = \"ORD-2026-0118\";"
+    },
+    {
+      "id": "clean-05-config", "category": "clean_screenshots", "lang": "eng", "template": "code", "font": "Consolas", "size": 16, "width": 1440, "height": 900,
+      "title": "application.json", "subtitle": "Configuration example / development",
+      "text": "{\n  \"application\": \"sample-reader\",\n  \"environment\": \"development\",\n  \"server\": {\n    \"host\": \"127.0.0.1\",\n    \"port\": 8080,\n    \"request_timeout_ms\": 15000\n  },\n  \"features\": {\n    \"offline_cache\": true,\n    \"keep_recent_files\": false,\n    \"allowed_types\": [\"png\", \"jpeg\", \"webp\"]\n  },\n  \"limits\": {\n    \"maximum_bytes\": 15728640,\n    \"maximum_pixels\": 40000000,\n    \"retry_count\": 3\n  },\n  \"message\": \"Check settings before starting a new session.\"\n}"
+    },
+    {
+      "id": "clean-06-log", "category": "clean_screenshots", "lang": "eng", "template": "code", "font": "Consolas", "size": 14, "width": 1440, "height": 900,
+      "title": "Build log", "subtitle": "Terminal output / example session",
+      "text": "2026-11-03 08:14:02 INFO  Starting local preview on port 3000\n2026-11-03 08:14:03 INFO  Loaded configuration from ./config.json\n2026-11-03 08:14:04 WARN  Optional cache directory does not exist\n2026-11-03 08:14:04 INFO  Creating cache directory: ./tmp/cache\n2026-11-03 08:14:05 INFO  Connected to local worker [worker_id=17]\n2026-11-03 08:14:06 ERROR Request failed: status=422; field=page_size\n2026-11-03 08:14:06 INFO  Expected a value between 1 and 100\n2026-11-03 08:14:07 INFO  Retrying with page_size=25 (attempt 2/3)\n2026-11-03 08:14:08 INFO  Request completed in 218 ms\n2026-11-03 08:14:09 INFO  Saved 25 records; rejected 0 records\n2026-11-03 08:14:10 INFO  Finished successfully; exit_code=0\n\nNext action: inspect the output file before importing another batch.\nNo remote upload was requested during this local example."
+    },
+    {
+      "id": "clean-07-numbers", "category": "clean_screenshots", "lang": "eng", "template": "table", "font": "Consolas", "size": 22, "width": 1440, "height": 900,
+      "title": "Office supplies / order summary", "subtitle": "Invoice INV-2026-118 / Currency: USD",
+      "text": "Item                 Quantity    Unit price    Amount\nA4 paper             3           4.50          13.50\nBlack ink            2           12.00         24.00\nNotebooks            5           3.75          18.75\nDelivery             1           6.00          6.00\n\nSubtotal                                      62.25\nDiscount                                      -5.00\nTax                                            4.29\nTOTAL                                         61.54\n\nPayment reference: 0018-2046-9031\nPayment due: 17/11/2026\nPlease include the invoice reference with your payment.\nContact the office if an item or quantity is incorrect."
+    },
+    {
+      "id": "clean-08-checklist", "category": "clean_screenshots", "lang": "eng", "template": "document", "font": "Arial", "size": 20, "width": 1280, "height": 900,
+      "title": "Before you send the report", "subtitle": "Editorial checklist / Revision 2",
+      "text": "1. Read the title and opening paragraph together. They should describe the same question.\n\n2. Check every date, amount, name and page reference against the source.\n\n3. Replace vague phrases with specific facts where the evidence supports them.\n\n4. Make sure each table has a title, units and a clear explanation of missing values.\n\n5. Confirm that the final file opens correctly and includes the intended attachments.\n\nSave a dated copy before sending. Keep the working notes with the original source material."
+    },
+    {
+      "id": "clean-09-help", "category": "clean_screenshots", "lang": "eng", "template": "article", "font": "Arial", "size": 24, "width": 1440, "height": 960,
+      "title": "Finding a saved document", "subtitle": "Help centre / Files and folders",
+      "text": "Open the folder where you last saved the document. Sort the list by modification date, then look for the most recent version with the correct name.\n\nIf several copies have similar names, open them one at a time and compare the first paragraph. Do not delete the older copies until you have confirmed which version contains your changes.\n\nYou can also search for a distinctive phrase from the document. A short phrase is often more useful than a common word.\n\nExample filename: meeting-notes_2026-11-03.txt"
+    },
+    {
+      "id": "clean-10-research", "category": "clean_screenshots", "lang": "eng", "template": "document", "font": "Times New Roman", "size": 26, "width": 1440, "height": 960,
+      "title": "Observations from a small reading study", "subtitle": "Working note / 24 participants",
+      "text": "Participants read two short passages and answered the same three questions after each passage. The second passage used shorter sentences and wider line spacing.\n\nThe median completion time changed from 4.8 minutes to 4.1 minutes. Twenty participants answered all questions correctly in both conditions.\n\nThese results describe this small sample only. The order of the passages was fixed, so practice may explain part of the difference.\n\nA follow-up study should vary the order and include readers with a wider range of experience."
+    },
+    {
+      "id": "dark-01-code", "category": "dark_screenshots", "lang": "eng", "template": "code", "font": "Consolas", "size": 20, "width": 1440, "height": 960,
+      "title": "filter-results.js", "subtitle": "Editor / local example",
+      "text": "const minimum_score = 60;\nconst reviewed_ids = new Set([2, 5, 8]);\n\nfunction pendingWords(words) {\n  return words.filter((word) => {\n    const uncertain = word.score < minimum_score;\n    return uncertain && !reviewed_ids.has(word.id);\n  });\n}\n\nconst summary = {\n  total: 42,\n  reviewed: 3,\n  remaining: 4,\n};\n\nconsole.log(JSON.stringify(summary, null, 2));\n// Check the source image before replacing an uncertain word.\n// A high score does not guarantee that a number is correct."
+    },
+    {
+      "id": "dark-02-chat", "category": "dark_screenshots", "lang": "eng", "template": "chat", "font": "Arial", "size": 22, "width": 1280, "height": 900,
+      "title": "Evening reading group", "subtitle": "Messages / 19:40",
+      "text": "Nora: I saved the article for tomorrow. The section about public libraries starts on page 6.\n\nSam: Thanks. Could you bring the printed copy? The small chart is easier to read on paper.\n\nNora: Of course. I will mark the page with a blue tab.\n\nIfe: Let us meet at 18:15 near the front desk. We have the room until 19:30.\n\nSam: That works for me. I will bring a notebook and the questions from last week."
+    },
+    {
+      "id": "dark-03-notes", "category": "dark_screenshots", "lang": "eng", "template": "article", "font": "Arial", "size": 25, "width": 1440, "height": 960,
+      "title": "Keep the useful details", "subtitle": "Personal notes / Reading list",
+      "text": "A note is easier to use later when it includes a little context. Record where the idea came from and why it mattered at the time.\n\nFor a quotation, keep the page number and the exact wording. For a question, write what you have already checked and what remains uncertain.\n\nSmall details can save a long search. A title, date or reference number may be enough to find the original source again.\n\nNext review: Friday, 6 November, 09:00."
+    },
+    {
+      "id": "dark-04-terminal", "category": "dark_screenshots", "lang": "eng", "template": "code", "font": "Consolas", "size": 18, "width": 1440, "height": 900,
+      "title": "Session output", "subtitle": "Terminal / example commands",
+      "text": "$ node scripts/check-files.mjs ./incoming\nFound 18 files in ./incoming\nChecking file types and dimensions...\nPASS: page_01.png (1920 x 1080)\nPASS: page_02.jpg (2400 x 3200)\nSKIP: notes.txt (unsupported image type)\nWARN: receipt_07.png has a low contrast range\n\nSummary: 16 accepted, 1 skipped, 1 warning\nElapsed time: 0.84 seconds\nOutput: ./reports/file-check_2026-11-03.json\n\n$ echo \"Review the warning before continuing.\"\nReview the warning before continuing.\n\nNo files were deleted or uploaded by this example."
+    },
+    {
+      "id": "dark-05-status", "category": "dark_screenshots", "lang": "eng", "template": "table", "font": "Arial", "size": 23, "width": 1440, "height": 900,
+      "title": "Weekly project status", "subtitle": "Tuesday, 3 November 2026",
+      "text": "Research notes       Complete       12 documents\nDraft review          In progress    3 of 5 sections\nImage captions        Ready          18 captions\nFinal proof           Scheduled      Friday, 10:00\n\nOpen question: should the appendix include the original table?\n\nThe editor will confirm the answer after reviewing the source file. Until then, keep both versions in the working folder.\n\nNext milestone: send the revised draft by 16:00 on Thursday."
+    },
+    {
+      "id": "slide-01-workshop", "category": "signs_posters_slides", "lang": "eng", "template": "poster", "font": "Arial", "size": 28, "width": 1440, "height": 960,
+      "title": "MAKE SPACE FOR IDEAS", "subtitle": "A practical writing workshop",
+      "text": "Saturday, 14 November 2026\n10:00 - 12:30\nCommunity Library, Room 2\n\nBring a notebook and one question you want to explore.\nWe will practise turning rough notes into clear paragraphs.\n\nPlaces are limited to 20 participants.\nRegistration closes on 10 November.\n\nAll experience levels are welcome.\nPlease arrive ten minutes before the session begins."
+    },
+    {
+      "id": "slide-02-safety", "category": "signs_posters_slides", "lang": "eng", "template": "poster", "font": "Arial", "size": 28, "width": 1280, "height": 960,
+      "title": "KEEP THIS EXIT CLEAR", "subtitle": "Loading area / Building notice",
+      "text": "Do not leave boxes, trolleys or equipment beside this door.\n\nDeliveries must be taken to the marked storage area.\nKeep a clear path at least 1.2 metres wide.\n\nReport a blocked exit to the reception desk immediately.\n\nThis door is for emergency access only.\nUse the main entrance for routine arrivals and departures.\n\nThank you for helping to keep the building accessible."
+    },
+    {
+      "id": "slide-03-lecture", "category": "signs_posters_slides", "lang": "eng", "template": "slide", "font": "Arial", "size": 28, "width": 1600, "height": 900,
+      "title": "From observation to evidence", "subtitle": "Research methods / Session 4",
+      "text": "1. State the question before collecting measurements.\n\n2. Record how the sample was selected.\n\n3. Keep the original observations alongside the summary.\n\n4. Explain uncertainty and missing data.\n\n5. Check whether another reader could repeat the procedure.\n\nA clear method makes a result easier to examine.\nA larger sample does not repair a biased selection process."
+    },
+    {
+      "id": "slide-04-library", "category": "signs_posters_slides", "lang": "eng", "template": "poster", "font": "Georgia", "size": 27, "width": 1440, "height": 960,
+      "title": "Your library, after hours", "subtitle": "New opening times from 9 November",
+      "text": "Monday to Thursday: 08:00 - 20:00\nFriday: 08:00 - 18:00\nSaturday: 10:00 - 16:00\nSunday: Closed\n\nThe reading room stays open until closing time.\nPrinting and copying finish thirty minutes earlier.\n\nReturn books through the outside slot when the building is closed.\nFor help renewing a loan, speak to the front desk during opening hours."
+    },
+    {
+      "id": "slide-05-checkpoints", "category": "signs_posters_slides", "lang": "eng", "template": "slide", "font": "Arial", "size": 28, "width": 1600, "height": 900,
+      "title": "Three useful checkpoints", "subtitle": "Project planning / Team briefing",
+      "text": "Before starting\nAgree on the expected result and the evidence needed to check it.\n\nHalfway through\nCompare progress with the original question. Adjust the plan if the evidence changes.\n\nBefore sharing\nCheck names, numbers, dates and links against the source.\n\nLeave a short note explaining any unresolved issue.\nA clear handover helps the next person continue the work."
+    },
+    {
+      "id": "slide-06-market", "category": "signs_posters_slides", "lang": "eng", "template": "poster", "font": "Arial", "size": 28, "width": 1280, "height": 960,
+      "title": "NEIGHBOURHOOD BOOK EXCHANGE", "subtitle": "Read it. Share it. Find something new.",
+      "text": "Sunday, 22 November\n11:00 - 15:00\nGarden Hall, West Entrance\n\nBring up to five books in good condition.\nChildren's books, novels and practical guides are welcome.\n\nPlease leave textbooks with missing pages at home.\nNo purchase is required to browse the tables.\n\nVolunteers will help sort donations from 10:00.\nRefreshments are available beside the information desk."
+    },
+    {
+      "id": "slide-07-data", "category": "signs_posters_slides", "lang": "eng", "template": "slide", "font": "Arial", "size": 28, "width": 1600, "height": 900,
+      "title": "Read the units before the numbers", "subtitle": "Working with tables / Example 07",
+      "text": "Distance: 12.5 kilometres\nTime: 48 minutes\nAverage speed: 15.625 kilometres per hour\n\nA number without its unit can be misleading.\nCheck the column heading and any note below the table.\n\nWhen rounding a result, keep enough precision for the decision.\nDo not add decimal places that were absent from the measurement.\n\nRecord the original value before changing its display format."
+    },
+    {
+      "id": "language-01-french", "category": "non_english", "lang": "fra", "template": "document", "font": "Arial", "size": 24, "width": 1440, "height": 960,
+      "title": "Une petite méthode de lecture", "subtitle": "Notes personnelles / 3 novembre 2026",
+      "text": "Avant de commencer, choisissez une question précise. Lisez le texte une première fois pour comprendre son organisation, puis revenez aux passages qui répondent à votre question.\n\nNotez les noms, les dates et les chiffres avec soin. Une citation doit conserver les mots de la source et son numéro de page.\n\nÀ la fin de la séance, écrivez deux phrases pour résumer ce que vous avez appris. Gardez aussi une liste des points qui restent à vérifier."
+    },
+    {
+      "id": "language-02-yoruba", "category": "non_english", "lang": "yor", "template": "document", "font": "Arial", "size": 26, "width": 1440, "height": 960,
+      "title": "Kíkà àti kíkọ àkọsílẹ̀", "subtitle": "Ilé ìkàwé / Àwọn àkọsílẹ̀ kéékèèké",
+      "text": "Mo lọ sí ilé ìkàwé ní òwúrọ̀. Mo mú ìwé kan àti ikọ̀wé mi lọ. Ilé náà mọ́, ó sì dákẹ́.\n\nOlùkọ́ sọ pé a gbọ́dọ̀ ka ìwé náà dáadáa. Lẹ́yìn náà, a lè kọ àwọn ohun tí a kọ́ sínú ìwé wa.\n\nÀwọn ọ̀rẹ́ mi fẹ́ràn láti ka ìtàn. A máa ń jíròrò nípa àwọn ènìyàn àti ibi tí ìtàn náà ti ṣẹlẹ̀.\n\nKí a pa àwọn ìwé mọ́ dáadáa, kí a sì dá wọn padà ní àkókò."
+    },
+    {
+      "id": "language-03-spanish", "category": "non_english", "lang": "spa", "template": "article", "font": "Georgia", "size": 24, "width": 1440, "height": 960,
+      "title": "Una nota que puedas encontrar", "subtitle": "Cuaderno de trabajo / Noviembre de 2026",
+      "text": "Una nota útil conserva algo más que una frase interesante. Incluye el título de la fuente, la fecha y una explicación breve de por qué quieres guardar esa información.\n\nSi copias una cita, comprueba las palabras y el número de página. Si anotas una pregunta, indica qué has revisado y qué falta por confirmar.\n\nAntes de cerrar el documento, elige un nombre claro para el archivo. Ese pequeño paso puede ahorrar una búsqueda larga la próxima semana."
+    },
+    {
+      "id": "language-04-german", "category": "non_english", "lang": "deu", "template": "document", "font": "Arial", "size": 24, "width": 1440, "height": 960,
+      "title": "Notizen für den nächsten Arbeitstag", "subtitle": "Arbeitsheft / Dienstag, 3. November 2026",
+      "text": "Schreiben Sie vor einer längeren Aufgabe auf, welches Ergebnis Sie erreichen möchten. Eine konkrete Frage hilft dabei, die wichtigen Informationen von den übrigen Details zu unterscheiden.\n\nPrüfen Sie Namen, Zahlen und Datumsangaben direkt in der Quelle. Bewahren Sie das Original auf, damit Sie später einzelne Stellen noch einmal vergleichen können.\n\nSpeichern Sie am Ende Ihre Änderungen und notieren Sie den nächsten Schritt. Eine kurze, verständliche Übergabe erleichtert den Einstieg am folgenden Morgen."
+    },
+    {
+      "id": "language-05-portuguese", "category": "non_english", "lang": "por", "template": "article", "font": "Arial", "size": 24, "width": 1440, "height": 960,
+      "title": "Guardar as informações importantes", "subtitle": "Caderno de leitura / 3 de novembro de 2026",
+      "text": "Uma boa anotação explica de onde veio a informação e por que ela merece ser guardada. Inclua o título do documento, a data e a página quando esses dados estiverem disponíveis.\n\nConfira com atenção os nomes, os valores e as referências. Uma pequena diferença num número pode mudar o sentido de uma frase ou de uma tabela.\n\nAntes de terminar, escreva uma pergunta para a próxima leitura. Assim, será mais fácil retomar o trabalho sem perder o contexto."
+    }
+  ]
+}

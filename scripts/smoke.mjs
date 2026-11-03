@@ -15,7 +15,7 @@ context.on("request", (req) => {
   const u = new URL(req.url());
   if (
     ["http:", "https:"].includes(u.protocol) &&
-    u.origin !== "http://127.0.0.1:3000"
+    u.origin !== (process.env.LETTRA_URL || "http://127.0.0.1:3000")
   )
     external.push(req.url());
 });
@@ -50,7 +50,7 @@ const waitResult = async () => {
 };
 await mkdir("test-results", { recursive: true });
 try {
-  await page.goto("http://127.0.0.1:3000");
+  await page.goto(process.env.LETTRA_URL || "http://127.0.0.1:3000");
   await page.getByRole("heading", { name: "Your images, in words." }).waitFor();
   await page.screenshot({ path: "test-results/desktop.png", fullPage: true });
   check("Desktop empty state");

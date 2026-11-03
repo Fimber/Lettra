@@ -1,0 +1,23 @@
+filter-results.js
+
+Editor / local example
+
+const minimum_score = 60;
+const reviewed_ids = new Set([2, 5, 8]);
+
+function pendingWords(words) {
+  return words.filter((word) => {
+    const uncertain = word.score < minimum_score;
+    return uncertain && !reviewed_ids.has(word.id);
+  });
+}
+
+const summary = {
+  total: 42,
+  reviewed: 3,
+  remaining: 4,
+};
+
+console.log(JSON.stringify(summary, null, 2));
+// Check the source image before replacing an uncertain word.
+// A high score does not guarantee that a number is correct.

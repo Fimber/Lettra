@@ -5,6 +5,8 @@ import type {
   ImageLike,
 } from "tesseract.js";
 import type { Settings } from "./settings";
+import { needsRowLayout } from "./layout";
+const analysis = new WeakMap<HTMLCanvasElement, { screenLike: boolean }>();
 let worker: OCRWorker | null = null;
 let workerKey = "";
 let generation = 0;
@@ -30,6 +32,9 @@ export async function prepareReader(s: Settings, onProgress = listener) {
     const next = await new Promise<OCRWorker>((resolve, reject) => {
       createWorker(s.lang, s.oem, {
         workerPath: "/vendor/tesseract-worker.min.js",
+        // Our worker is same-origin. Avoid the unnecessary blob/importScripts
+        // wrapper, which stalled Firefox when restarting from the offline cache.
+        workerBlobURL: false,
         // The relaxed-SIMD core in v7 lacks the float DotProductSSE function
         // used by tessdata_best. The portable LSTM core supports these models.
         corePath:
@@ -64,22 +69,26 @@ export async function preprocess(
 ): Promise<HTMLCanvasElement> {
   if (s.useOriginal) return canvas;
   processor ||= new Worker("/preprocess.worker.js");
-  const p = processor,
-    bitmap = await createImageBitmap(canvas);
-  if (p !== processor) {
-    bitmap.close();
-    throw new Error("Cancelled");
-  }
+  const p = processor;
+  const pixels = canvas
+    .getContext("2d")!
+    .getImageData(0, 0, canvas.width, canvas.height);
   return new Promise((resolve, reject) => {
     rejectProcessing = reject;
     p.onmessage = ({ data }) => {
       rejectProcessing = null;
       if (data.error) return reject(new Error(data.error));
       const out = document.createElement("canvas");
-      out.width = data.bitmap.width;
-      out.height = data.bitmap.height;
-      out.getContext("2d")!.drawImage(data.bitmap, 0, 0);
-      data.bitmap.close();
+      out.width = data.width;
+      out.height = data.height;
+      out
+        .getContext("2d")!
+        .putImageData(
+          new ImageData(data.pixels, data.width, data.height),
+          0,
+          0,
+        );
+      analysis.set(out, data.analysis);
       resolve(out);
     };
     p.onerror = () => {
@@ -91,8 +100,8 @@ export async function preprocess(
       );
     };
     p.postMessage(
-      { id: Date.now(), bitmap, steps: s.steps, preset: s.preset },
-      [bitmap],
+      { id: Date.now(), pixels, steps: s.steps, preset: s.preset },
+      [pixels.data.buffer],
     );
   });
 }
@@ -125,20 +134,38 @@ export async function recognize(
     tessedit_char_whitelist: s.numbersOnly ? "0123456789.,-/:" : "",
   });
   if (epoch !== generation || active !== worker) throw new Error("Cancelled");
-  const { data } = await new Promise<RecognizeResult>((resolve, reject) => {
-    rejectReading = reject;
-    active
-      // v7's browser loadImage accepts Uint8Array; its ImageLike declaration
-      // only lists Node's Buffer for bytes. No Node Buffer is needed at runtime.
-      .recognize(
-        bytes as unknown as ImageLike,
-        {},
-        { text: true, blocks: true },
-      )
-      .then(resolve, reject);
-  }).finally(() => {
-    if (epoch === generation) rejectReading = null;
-  });
+  const read = () =>
+    new Promise<RecognizeResult>((resolve, reject) => {
+      rejectReading = reject;
+      active
+        // v7's browser loadImage accepts Uint8Array; its ImageLike declaration
+        // only lists Node's Buffer for bytes. No Node Buffer is needed at runtime.
+        .recognize(
+          bytes as unknown as ImageLike,
+          {},
+          { text: true, blocks: true },
+        )
+        .then(resolve, reject);
+    }).finally(() => {
+      if (epoch === generation) rejectReading = null;
+    });
+  let { data } = await read();
+  if (epoch !== generation || active !== worker) throw new Error("Cancelled");
+  const initialWords = (data.blocks ?? []).flatMap((b) =>
+    b.paragraphs.flatMap((p) => p.lines.flatMap((l) => l.words)),
+  );
+  if (
+    s.preset === "auto" &&
+    s.psm === 3 &&
+    !s.useOriginal &&
+    analysis.get(canvas)?.screenLike &&
+    needsRowLayout(initialWords, canvas.height)
+  ) {
+    onProgress("checking row order", 0);
+    await active.setParameters({ tessedit_pageseg_mode: "6" as PSM });
+    if (epoch !== generation || active !== worker) throw new Error("Cancelled");
+    data = (await read()).data;
+  }
   return {
     text: data.text,
     confidence: data.confidence,

@@ -1,0 +1,18 @@
+Build log
+
+Terminal output / example session
+
+2026-11-03 08:14:02 INFO  Starting local preview on port 3000
+2026-11-03 08:14:03 INFO  Loaded configuration from ./config.json
+2026-11-03 08:14:04 WARN  Optional cache directory does not exist
+2026-11-03 08:14:04 INFO  Creating cache directory: ./tmp/cache
+2026-11-03 08:14:05 INFO  Connected to local worker [worker_id=17]
+2026-11-03 08:14:06 ERROR Request failed: status=422; field=page_size
+2026-11-03 08:14:06 INFO  Expected a value between 1 and 100
+2026-11-03 08:14:07 INFO  Retrying with page_size=25 (attempt 2/3)
+2026-11-03 08:14:08 INFO  Request completed in 218 ms
+2026-11-03 08:14:09 INFO  Saved 25 records; rejected 0 records
+2026-11-03 08:14:10 INFO  Finished successfully; exit_code=0
+
+Next action: inspect the output file before importing another batch.
+No remote upload was requested during this local example.

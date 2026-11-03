@@ -1,0 +1,986 @@
+{
+  "generatedAt": "2026-11-03T17:59:36.999Z",
+  "corpusSha256": "23d2189acf2b3ffac04ba9913541d750e8e39e62c364f9607a7f4783e07dbed0",
+  "baselineBuild": {
+    "commit": "63707095cd6daff057430996e17751a31503f98a",
+    "indexSha256": "a8571747d1243b4c30fe81893660115f47712faf7317b051a52f63aef53796bc",
+    "processorSha256": "277688dffba93f793604bd1b5217e307e4f933d458d702c46bd2735a70d4f285"
+  },
+  "rejectedCandidateBuild": {
+    "indexSha256": "af743cfecb22ce1a426727c0121f57e51122400d1be3e9065f3ef327df665cc6",
+    "processorSha256": "066f937c53b2a2b8c5ba0916fe63538932901829a7deff374f2baa975a1f753c"
+  },
+  "acceptedAutoBuild": {
+    "indexSha256": "60b9c7de26cff9330bc0846c058d6713b561feb3ad4a67496ecc6db5ee16872c",
+    "processorSha256": "74a6f425ef7bc94c3308bbfc8846e7f80bc93392f1304b251b7efd834f111fe3"
+  },
+  "validationScope": "All 50 images measured in all five baseline presets (250). The candidate run was stopped after a photo regression was confirmed. All 50 Auto cases were rerun on the accepted build. Manual preset algorithms are unchanged; their 156 completed candidate runs and 50-image input-buffer equivalence are separate regression evidence, not a claim that all five final presets were rerun.",
+  "images": 50,
+  "runsBefore": 250,
+  "runsAfter": 50,
+  "candidateRuns": 196,
+  "acceptedAutoRuns": 50,
+  "totalMeasuredExtractions": 496,
+  "physicalPhones": {
+    "android": "not run: no physical device or device-cloud account available",
+    "iphone": "not run: no physical device or device-cloud account available"
+  },
+  "timings": "Diagnostic timings only: independent suites overlapped on the same Windows host. Do not treat these as isolated laptop or phone performance gates.",
+  "baseline": {
+    "Auto/clean_screenshots": {
+      "count": 10,
+      "failures": 0,
+      "meanCER": 0.12388498580022844,
+      "weightedCER": 0.14703196347031963,
+      "meanWER": 0.1982821301652916,
+      "casefoldCER": 0.12249125757723194,
+      "numberTokenErrorRate": 0.5612244897959183,
+      "numericExactImages": 6,
+      "numericImages": 10,
+      "p50Seconds": 2.896536600000007,
+      "p95Seconds": 4.3655172
+    },
+    "Screenshot/clean_screenshots": {
+      "count": 10,
+      "failures": 0,
+      "meanCER": 0.00754565265383567,
+      "weightedCER": 0.007123287671232876,
+      "meanWER": 0.05796266439210531,
+      "casefoldCER": 0.00754565265383567,
+      "numberTokenErrorRate": 0.08163265306122448,
+      "numericExactImages": 7,
+      "numericImages": 10,
+      "p50Seconds": 2.94899059999999,
+      "p95Seconds": 4.384908899999995
+    },
+    "Document/clean_screenshots": {
+      "count": 10,
+      "failures": 0,
+      "meanCER": 0.10507548521136781,
+      "weightedCER": 0.11908675799086758,
+      "meanWER": 0.17408179285843245,
+      "casefoldCER": 0.10472705315561866,
+      "numberTokenErrorRate": 0.40816326530612246,
+      "numericExactImages": 6,
+      "numericImages": 10,
+      "p50Seconds": 3.5809906999999948,
+      "p95Seconds": 7.0692555
+    },
+    "Dark mode/clean_screenshots": {
+      "count": 10,
+      "failures": 0,
+      "meanCER": 0.12654573968049454,
+      "weightedCER": 0.14922374429223745,
+      "meanWER": 0.20869879683195824,
+      "casefoldCER": 0.125152011457498,
+      "numberTokenErrorRate": 0.5816326530612245,
+      "numericExactImages": 6,
+      "numericImages": 10,
+      "p50Seconds": 2.9518445000000066,
+      "p95Seconds": 3.9939603999999997
+    },
+    "Receipt/clean_screenshots": {
+      "count": 10,
+      "failures": 0,
+      "meanCER": 0.010736022525812898,
+      "weightedCER": 0.01132420091324201,
+      "meanWER": 0.07877814913373607,
+      "casefoldCER": 0.010736022525812898,
+      "numberTokenErrorRate": 0.29591836734693877,
+      "numericExactImages": 6,
+      "numericImages": 10,
+      "p50Seconds": 5.858802599999995,
+      "p95Seconds": 8.262951700000002
+    },
+    "Auto/dark_screenshots": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.007698120617380832,
+      "weightedCER": 0.007877280265339967,
+      "meanWER": 0.04485734215425534,
+      "casefoldCER": 0.007698120617380832,
+      "numberTokenErrorRate": 0.11428571428571428,
+      "numericExactImages": 4,
+      "numericImages": 5,
+      "p50Seconds": 3.023607300000003,
+      "p95Seconds": 3.48400629999995
+    },
+    "Screenshot/dark_screenshots": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.007804544411448666,
+      "weightedCER": 0.007877280265339967,
+      "meanWER": 0.0455095529570501,
+      "casefoldCER": 0.007804544411448666,
+      "numberTokenErrorRate": 0.17142857142857143,
+      "numericExactImages": 3,
+      "numericImages": 5,
+      "p50Seconds": 2.5615027000000117,
+      "p95Seconds": 2.890372700000007
+    },
+    "Document/dark_screenshots": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.0036431806493355673,
+      "weightedCER": 0.0037313432835820895,
+      "meanWER": 0.022796448953709574,
+      "casefoldCER": 0.0036431806493355673,
+      "numberTokenErrorRate": 0.11428571428571428,
+      "numericExactImages": 4,
+      "numericImages": 5,
+      "p50Seconds": 3.3467648000000043,
+      "p95Seconds": 5.1463332999999984
+    },
+    "Dark mode/dark_screenshots": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.006592854999118779,
+      "weightedCER": 0.007048092868988391,
+      "meanWER": 0.04819977366519612,
+      "casefoldCER": 0.006592854999118779,
+      "numberTokenErrorRate": 0.14285714285714285,
+      "numericExactImages": 4,
+      "numericImages": 5,
+      "p50Seconds": 2.9368692000000154,
+      "p95Seconds": 3.069726400000014
+    },
+    "Receipt/dark_screenshots": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.0036431806493355673,
+      "weightedCER": 0.0037313432835820895,
+      "meanWER": 0.022796448953709574,
+      "casefoldCER": 0.0036431806493355673,
+      "numberTokenErrorRate": 0.11428571428571428,
+      "numericExactImages": 4,
+      "numericImages": 5,
+      "p50Seconds": 5.911267400000011,
+      "p95Seconds": 6.280997899999988
+    },
+    "Auto/signs_posters_slides": {
+      "count": 7,
+      "failures": 0,
+      "meanCER": 0.0006641540405403946,
+      "weightedCER": 0.0006854009595613434,
+      "meanWER": 0.00399619941873463,
+      "casefoldCER": 0,
+      "numberTokenErrorRate": 0,
+      "numericExactImages": 6,
+      "numericImages": 6,
+      "p50Seconds": 2.6022367000000086,
+      "p95Seconds": 2.897422499999986
+    },
+    "Screenshot/signs_posters_slides": {
+      "count": 7,
+      "failures": 0,
+      "meanCER": 0.024762281097125464,
+      "weightedCER": 0.02467443454420836,
+      "meanWER": 0.027754585512422863,
+      "casefoldCER": 0.02409812705658507,
+      "numberTokenErrorRate": 0,
+      "numericExactImages": 6,
+      "numericImages": 6,
+      "p50Seconds": 2.523316200000001,
+      "p95Seconds": 2.6482768000000507
+    },
+    "Document/signs_posters_slides": {
+      "count": 7,
+      "failures": 0,
+      "meanCER": 0.0003232062055591468,
+      "weightedCER": 0.0003427004797806717,
+      "meanWER": 0.001984126984126984,
+      "casefoldCER": 0,
+      "numberTokenErrorRate": 0,
+      "numericExactImages": 6,
+      "numericImages": 6,
+      "p50Seconds": 3.1686735000000334,
+      "p95Seconds": 3.2984532999999936
+    },
+    "Dark mode/signs_posters_slides": {
+      "count": 7,
+      "failures": 0,
+      "meanCER": 0.0006641540405403946,
+      "weightedCER": 0.0006854009595613434,
+      "meanWER": 0.00399619941873463,
+      "casefoldCER": 0,
+      "numberTokenErrorRate": 0,
+      "numericExactImages": 6,
+      "numericImages": 6,
+      "p50Seconds": 2.520593300000008,
+      "p95Seconds": 2.7944013000000267
+    },
+    "Receipt/signs_posters_slides": {
+      "count": 7,
+      "failures": 0,
+      "meanCER": 0.0003232062055591468,
+      "weightedCER": 0.0003427004797806717,
+      "meanWER": 0.001984126984126984,
+      "casefoldCER": 0,
+      "numberTokenErrorRate": 0,
+      "numericExactImages": 6,
+      "numericImages": 6,
+      "p50Seconds": 5.571417200000026,
+      "p95Seconds": 8.83073180000001
+    },
+    "Auto/non_english": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.016862234676507593,
+      "weightedCER": 0.013433425523508494,
+      "meanWER": 0.054198350939597205,
+      "casefoldCER": 0.016470077813762495,
+      "numberTokenErrorRate": 0,
+      "numericExactImages": 4,
+      "numericImages": 4,
+      "p50Seconds": 6.812652000000002,
+      "p95Seconds": 11.528066700000025
+    },
+    "Screenshot/non_english": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.015620583258684184,
+      "weightedCER": 0.012248123271434215,
+      "meanWER": 0.047242670799431744,
+      "casefoldCER": 0.015620583258684184,
+      "numberTokenErrorRate": 0,
+      "numericExactImages": 4,
+      "numericImages": 4,
+      "p50Seconds": 3.8655252999999794,
+      "p95Seconds": 17.218440699999977
+    },
+    "Document/non_english": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.014720812182741117,
+      "weightedCER": 0.011457921770051362,
+      "meanWER": 0.04269662921348315,
+      "casefoldCER": 0.014720812182741117,
+      "numberTokenErrorRate": 0,
+      "numericExactImages": 4,
+      "numericImages": 4,
+      "p50Seconds": 6.157428500000038,
+      "p95Seconds": 16.468432100000033
+    },
+    "Dark mode/non_english": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.016077920951017396,
+      "weightedCER": 0.012643224022125641,
+      "meanWER": 0.049600649790171925,
+      "casefoldCER": 0.016077920951017396,
+      "numberTokenErrorRate": 0,
+      "numericExactImages": 4,
+      "numericImages": 4,
+      "p50Seconds": 4.409423300000024,
+      "p95Seconds": 4.965785700000008
+    },
+    "Receipt/non_english": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.015228426395939087,
+      "weightedCER": 0.011853022520742789,
+      "meanWER": 0.0449438202247191,
+      "casefoldCER": 0.015228426395939087,
+      "numberTokenErrorRate": 0,
+      "numericExactImages": 4,
+      "numericImages": 4,
+      "p50Seconds": 7.693119699999923,
+      "p95Seconds": 11.9925858
+    },
+    "Auto/receipts": {
+      "count": 8,
+      "failures": 0,
+      "meanCER": 0.1321036125921859,
+      "weightedCER": 0.13645735707591378,
+      "meanWER": 0.3855312916515207,
+      "casefoldCER": 0.12947467703202276,
+      "numberTokenErrorRate": 0.42574257425742573,
+      "numericExactImages": 0,
+      "numericImages": 8,
+      "p50Seconds": 4.925790000000001,
+      "p95Seconds": 30.0652089
+    },
+    "Screenshot/receipts": {
+      "count": 8,
+      "failures": 0,
+      "meanCER": 0.13247400869969947,
+      "weightedCER": 0.1360824742268041,
+      "meanWER": 0.3830863723732681,
+      "casefoldCER": 0.13118046453524362,
+      "numberTokenErrorRate": 0.33993399339933994,
+      "numericExactImages": 0,
+      "numericImages": 8,
+      "p50Seconds": 4.855389399999986,
+      "p95Seconds": 8.941093500000003
+    },
+    "Document/receipts": {
+      "count": 8,
+      "failures": 0,
+      "meanCER": 0.17403949410845887,
+      "weightedCER": 0.18894095595126523,
+      "meanWER": 0.43085104328806617,
+      "casefoldCER": 0.16969051792242618,
+      "numberTokenErrorRate": 0.3465346534653465,
+      "numericExactImages": 0,
+      "numericImages": 8,
+      "p50Seconds": 4.5691181,
+      "p95Seconds": 5.080170799999992
+    },
+    "Dark mode/receipts": {
+      "count": 8,
+      "failures": 0,
+      "meanCER": 0.1263883776316679,
+      "weightedCER": 0.13158388003748828,
+      "meanWER": 0.3859853514805805,
+      "casefoldCER": 0.12461707500460939,
+      "numberTokenErrorRate": 0.4158415841584158,
+      "numericExactImages": 0,
+      "numericImages": 8,
+      "p50Seconds": 3.858249699999986,
+      "p95Seconds": 4.208963799999998
+    },
+    "Receipt/receipts": {
+      "count": 8,
+      "failures": 0,
+      "meanCER": 0.18544062465881822,
+      "weightedCER": 0.19606373008434863,
+      "meanWER": 0.5122817961300785,
+      "casefoldCER": 0.18072044071982263,
+      "numberTokenErrorRate": 0.38283828382838286,
+      "numericExactImages": 0,
+      "numericImages": 8,
+      "p50Seconds": 5.820210800000001,
+      "p95Seconds": 7.132772999999987
+    },
+    "Auto/phone-photos": {
+      "count": 10,
+      "failures": 0,
+      "meanCER": 0.5964988583588327,
+      "weightedCER": 0.5929207652389435,
+      "meanWER": 0.7785349792721685,
+      "casefoldCER": 0.585620470459654,
+      "numberTokenErrorRate": 0.8335315101070154,
+      "numericExactImages": 0,
+      "numericImages": 10,
+      "p50Seconds": 27.617258899999783,
+      "p95Seconds": 54.21513569999998
+    },
+    "Screenshot/phone-photos": {
+      "count": 10,
+      "failures": 0,
+      "meanCER": 0.7725847980666668,
+      "weightedCER": 0.7718224769576331,
+      "meanWER": 1.1065890938795255,
+      "casefoldCER": 0.750068442065049,
+      "numberTokenErrorRate": 1.319857312722949,
+      "numericExactImages": 0,
+      "numericImages": 10,
+      "p50Seconds": 33.88586160000006,
+      "p95Seconds": 85.18245070000005
+    },
+    "Document/phone-photos": {
+      "count": 10,
+      "failures": 0,
+      "meanCER": 0.5964988583588327,
+      "weightedCER": 0.5929207652389435,
+      "meanWER": 0.7785349792721685,
+      "casefoldCER": 0.585620470459654,
+      "numberTokenErrorRate": 0.8335315101070154,
+      "numericExactImages": 0,
+      "numericImages": 10,
+      "p50Seconds": 24.972660199999925,
+      "p95Seconds": 38.72880610000004
+    },
+    "Dark mode/phone-photos": {
+      "count": 10,
+      "failures": 0,
+      "meanCER": 0.7175850590425508,
+      "weightedCER": 0.7110216094802881,
+      "meanWER": 0.9178589356511677,
+      "casefoldCER": 0.7029551620534848,
+      "numberTokenErrorRate": 0.8703923900118906,
+      "numericExactImages": 0,
+      "numericImages": 10,
+      "p50Seconds": 21.76030920000002,
+      "p95Seconds": 28.83642220000003
+    },
+    "Receipt/phone-photos": {
+      "count": 10,
+      "failures": 0,
+      "meanCER": 0.7955730969879611,
+      "weightedCER": 0.7934319572457594,
+      "meanWER": 1.02503806809257,
+      "casefoldCER": 0.7759888662602045,
+      "numberTokenErrorRate": 1.1521997621878717,
+      "numericExactImages": 0,
+      "numericImages": 10,
+      "p50Seconds": 28.66981779999996,
+      "p95Seconds": 94.43951269999997
+    },
+    "Auto/low-quality": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.7723204171738028,
+      "weightedCER": 0.7639235987147447,
+      "meanWER": 0.9141115648459699,
+      "casefoldCER": 0.7645916271597033,
+      "numberTokenErrorRate": 0.9285714285714286,
+      "numericExactImages": 0,
+      "numericImages": 5,
+      "p50Seconds": 19.547499700000046,
+      "p95Seconds": 45.60326239999989
+    },
+    "Screenshot/low-quality": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.7811030741561849,
+      "weightedCER": 0.776359633464239,
+      "meanWER": 1.0955205077000243,
+      "casefoldCER": 0.7580718530251491,
+      "numberTokenErrorRate": 1.5276497695852536,
+      "numericExactImages": 0,
+      "numericImages": 5,
+      "p50Seconds": 34.140070400000084,
+      "p95Seconds": 85.65637339999992
+    },
+    "Document/low-quality": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.7723204171738028,
+      "weightedCER": 0.7639235987147447,
+      "meanWER": 0.9141115648459699,
+      "casefoldCER": 0.7645916271597033,
+      "numberTokenErrorRate": 0.9285714285714286,
+      "numericExactImages": 0,
+      "numericImages": 5,
+      "p50Seconds": 17.27492280000006,
+      "p95Seconds": 42.6018835
+    },
+    "Dark mode/low-quality": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.8147965120083885,
+      "weightedCER": 0.8024217541354278,
+      "meanWER": 0.9395721162011963,
+      "casefoldCER": 0.8063322823875279,
+      "numberTokenErrorRate": 0.9216589861751152,
+      "numericExactImages": 0,
+      "numericImages": 5,
+      "p50Seconds": 19.46130379999988,
+      "p95Seconds": 46.556744600000094
+    },
+    "Receipt/low-quality": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.842632911522499,
+      "weightedCER": 0.8324110436748781,
+      "meanWER": 0.9851101927841366,
+      "casefoldCER": 0.8325353591511467,
+      "numberTokenErrorRate": 1.2995391705069124,
+      "numericExactImages": 0,
+      "numericImages": 5,
+      "p50Seconds": 26.629741999999855,
+      "p95Seconds": 71.13982920000004
+    }
+  },
+  "final": {
+    "Auto/clean_screenshots": {
+      "count": 10,
+      "failures": 0,
+      "meanCER": 0.009926817685037009,
+      "weightedCER": 0.009315068493150684,
+      "meanWER": 0.06651151496681795,
+      "casefoldCER": 0.009926817685037009,
+      "numberTokenErrorRate": 0.10204081632653061,
+      "numericExactImages": 6,
+      "numericImages": 10,
+      "p50Seconds": 5.5696852,
+      "p95Seconds": 15.4255108
+    },
+    "Auto/dark_screenshots": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.006592854999118779,
+      "weightedCER": 0.007048092868988391,
+      "meanWER": 0.04819977366519612,
+      "casefoldCER": 0.006592854999118779,
+      "numberTokenErrorRate": 0.14285714285714285,
+      "numericExactImages": 4,
+      "numericImages": 5,
+      "p50Seconds": 3.5108466999999948,
+      "p95Seconds": 4.00779389999999
+    },
+    "Auto/signs_posters_slides": {
+      "count": 7,
+      "failures": 0,
+      "meanCER": 0.0006641540405403946,
+      "weightedCER": 0.0006854009595613434,
+      "meanWER": 0.00399619941873463,
+      "casefoldCER": 0,
+      "numberTokenErrorRate": 0,
+      "numericExactImages": 6,
+      "numericImages": 6,
+      "p50Seconds": 4.976165999999997,
+      "p95Seconds": 6.482126400000008
+    },
+    "Auto/non_english": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.015736040609137057,
+      "weightedCER": 0.012248123271434215,
+      "meanWER": 0.0449438202247191,
+      "casefoldCER": 0.015736040609137057,
+      "numberTokenErrorRate": 0,
+      "numericExactImages": 4,
+      "numericImages": 4,
+      "p50Seconds": 6.196106499999995,
+      "p95Seconds": 14.639390199999994
+    },
+    "Auto/receipts": {
+      "count": 8,
+      "failures": 0,
+      "meanCER": 0.12736765509923426,
+      "weightedCER": 0.13233364573570758,
+      "meanWER": 0.3757922806625097,
+      "casefoldCER": 0.12538194423889962,
+      "numberTokenErrorRate": 0.40594059405940597,
+      "numericExactImages": 0,
+      "numericImages": 8,
+      "p50Seconds": 5.472345099999977,
+      "p95Seconds": 8.487986899999989
+    },
+    "Auto/phone-photos": {
+      "count": 10,
+      "failures": 0,
+      "meanCER": 0.5964988583588327,
+      "weightedCER": 0.5929207652389435,
+      "meanWER": 0.7785349792721685,
+      "casefoldCER": 0.585620470459654,
+      "numberTokenErrorRate": 0.8335315101070154,
+      "numericExactImages": 0,
+      "numericImages": 10,
+      "p50Seconds": 30.477431999999972,
+      "p95Seconds": 44.70474169999996
+    },
+    "Auto/low-quality": {
+      "count": 5,
+      "failures": 0,
+      "meanCER": 0.7723204171738028,
+      "weightedCER": 0.7639235987147447,
+      "meanWER": 0.9141115648459699,
+      "casefoldCER": 0.7645916271597033,
+      "numberTokenErrorRate": 0.9285714285714286,
+      "numericExactImages": 0,
+      "numericImages": 5,
+      "p50Seconds": 22.886686400000006,
+      "p95Seconds": 55.455926199999986
+    }
+  },
+  "deltas": [
+    {
+      "id": "clean-01-article",
+      "category": "clean_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "clean-02-letter",
+      "category": "clean_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "clean-03-chat",
+      "category": "clean_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0.004319654427645789,
+      "afterCER": 0.004319654427645789,
+      "deltaCER": 0
+    },
+    {
+      "id": "clean-04-code",
+      "category": "clean_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0.024518388791593695,
+      "afterCER": 0.024518388791593695,
+      "deltaCER": 0
+    },
+    {
+      "id": "clean-05-config",
+      "category": "clean_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0.06651884700665188,
+      "afterCER": 0.0598669623059867,
+      "deltaCER": -0.006651884700665182
+    },
+    {
+      "id": "clean-06-log",
+      "category": "clean_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0.6422764227642277,
+      "afterCER": 0.008130081300813009,
+      "deltaCER": -0.6341463414634146
+    },
+    {
+      "id": "clean-07-numbers",
+      "category": "clean_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0.5012165450121655,
+      "afterCER": 0.0024330900243309003,
+      "deltaCER": -0.4987834549878346
+    },
+    {
+      "id": "clean-08-checklist",
+      "category": "clean_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "clean-09-help",
+      "category": "clean_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "clean-10-research",
+      "category": "clean_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "dark-01-code",
+      "category": "dark_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0.008016032064128256,
+      "afterCER": 0.008016032064128256,
+      "deltaCER": 0
+    },
+    {
+      "id": "dark-02-chat",
+      "category": "dark_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0.009174311926605505,
+      "afterCER": 0.0045871559633027525,
+      "deltaCER": -0.0045871559633027525
+    },
+    {
+      "id": "dark-03-notes",
+      "category": "dark_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "dark-04-terminal",
+      "category": "dark_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0.014466546112115732,
+      "afterCER": 0.018083182640144666,
+      "deltaCER": 0.0036166365280289343
+    },
+    {
+      "id": "dark-05-status",
+      "category": "dark_screenshots",
+      "variant": "Auto",
+      "beforeCER": 0.00683371298405467,
+      "afterCER": 0.002277904328018223,
+      "deltaCER": -0.004555808656036447
+    },
+    {
+      "id": "slide-01-workshop",
+      "category": "signs_posters_slides",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "slide-02-safety",
+      "category": "signs_posters_slides",
+      "variant": "Auto",
+      "beforeCER": 0.002386634844868735,
+      "afterCER": 0.002386634844868735,
+      "deltaCER": 0
+    },
+    {
+      "id": "slide-03-lecture",
+      "category": "signs_posters_slides",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "slide-04-library",
+      "category": "signs_posters_slides",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "slide-05-checkpoints",
+      "category": "signs_posters_slides",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "slide-06-market",
+      "category": "signs_posters_slides",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "slide-07-data",
+      "category": "signs_posters_slides",
+      "variant": "Auto",
+      "beforeCER": 0.0022624434389140274,
+      "afterCER": 0.0022624434389140274,
+      "deltaCER": 0
+    },
+    {
+      "id": "language-01-french",
+      "category": "non_english",
+      "variant": "Auto",
+      "beforeCER": 0.00392156862745098,
+      "afterCER": 0,
+      "deltaCER": -0.00392156862745098
+    },
+    {
+      "id": "language-02-yoruba",
+      "category": "non_english",
+      "variant": "Auto",
+      "beforeCER": 0.07868020304568528,
+      "afterCER": 0.07868020304568528,
+      "deltaCER": 0
+    },
+    {
+      "id": "language-03-spanish",
+      "category": "non_english",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "language-04-german",
+      "category": "non_english",
+      "variant": "Auto",
+      "beforeCER": 0.0017094017094017094,
+      "afterCER": 0,
+      "deltaCER": -0.0017094017094017094
+    },
+    {
+      "id": "language-05-portuguese",
+      "category": "non_english",
+      "variant": "Auto",
+      "beforeCER": 0,
+      "afterCER": 0,
+      "deltaCER": 0
+    },
+    {
+      "id": "sroie-001",
+      "category": "receipts",
+      "variant": "Auto",
+      "beforeCER": 0.24144144144144145,
+      "afterCER": 0.24144144144144145,
+      "deltaCER": 0
+    },
+    {
+      "id": "sroie-073",
+      "category": "receipts",
+      "variant": "Auto",
+      "beforeCER": 0.17667238421955403,
+      "afterCER": 0.13893653516295026,
+      "deltaCER": -0.037735849056603765
+    },
+    {
+      "id": "sroie-146",
+      "category": "receipts",
+      "variant": "Auto",
+      "beforeCER": 0.06471494607087827,
+      "afterCER": 0.06471494607087827,
+      "deltaCER": 0
+    },
+    {
+      "id": "sroie-219",
+      "category": "receipts",
+      "variant": "Auto",
+      "beforeCER": 0.09250398724082935,
+      "afterCER": 0.09250398724082935,
+      "deltaCER": 0
+    },
+    {
+      "id": "sroie-292",
+      "category": "receipts",
+      "variant": "Auto",
+      "beforeCER": 0.015517241379310345,
+      "afterCER": 0.013793103448275862,
+      "deltaCER": -0.0017241379310344827
+    },
+    {
+      "id": "sroie-365",
+      "category": "receipts",
+      "variant": "Auto",
+      "beforeCER": 0.14731182795698924,
+      "afterCER": 0.14731182795698924,
+      "deltaCER": 0
+    },
+    {
+      "id": "sroie-438",
+      "category": "receipts",
+      "variant": "Auto",
+      "beforeCER": 0.014150943396226415,
+      "afterCER": 0.015723270440251572,
+      "deltaCER": 0.0015723270440251569
+    },
+    {
+      "id": "sroie-511",
+      "category": "receipts",
+      "variant": "Auto",
+      "beforeCER": 0.30451612903225805,
+      "afterCER": 0.30451612903225805,
+      "deltaCER": 0
+    },
+    {
+      "id": "phone-photo-01",
+      "category": "phone-photos",
+      "variant": "Auto",
+      "beforeCER": 0.6925287356321839,
+      "afterCER": 0.6925287356321839,
+      "deltaCER": 0
+    },
+    {
+      "id": "phone-photo-02",
+      "category": "phone-photos",
+      "variant": "Auto",
+      "beforeCER": 0.5373604727511491,
+      "afterCER": 0.5373604727511491,
+      "deltaCER": 0
+    },
+    {
+      "id": "phone-photo-03",
+      "category": "phone-photos",
+      "variant": "Auto",
+      "beforeCER": 0.5331140678726267,
+      "afterCER": 0.5331140678726267,
+      "deltaCER": 0
+    },
+    {
+      "id": "phone-photo-04",
+      "category": "phone-photos",
+      "variant": "Auto",
+      "beforeCER": 0.7821677263094157,
+      "afterCER": 0.7821677263094157,
+      "deltaCER": 0
+    },
+    {
+      "id": "phone-photo-05",
+      "category": "phone-photos",
+      "variant": "Auto",
+      "beforeCER": 0.7890124705089315,
+      "afterCER": 0.7890124705089315,
+      "deltaCER": 0
+    },
+    {
+      "id": "phone-photo-06",
+      "category": "phone-photos",
+      "variant": "Auto",
+      "beforeCER": 0.6831187410586552,
+      "afterCER": 0.6831187410586552,
+      "deltaCER": 0
+    },
+    {
+      "id": "phone-photo-07",
+      "category": "phone-photos",
+      "variant": "Auto",
+      "beforeCER": 0.2778811981722796,
+      "afterCER": 0.2778811981722796,
+      "deltaCER": 0
+    },
+    {
+      "id": "phone-photo-08",
+      "category": "phone-photos",
+      "variant": "Auto",
+      "beforeCER": 0.09205471031197172,
+      "afterCER": 0.09205471031197172,
+      "deltaCER": 0
+    },
+    {
+      "id": "phone-photo-09",
+      "category": "phone-photos",
+      "variant": "Auto",
+      "beforeCER": 1,
+      "afterCER": 1,
+      "deltaCER": 0
+    },
+    {
+      "id": "phone-photo-10",
+      "category": "phone-photos",
+      "variant": "Auto",
+      "beforeCER": 0.5777504609711125,
+      "afterCER": 0.5777504609711125,
+      "deltaCER": 0
+    },
+    {
+      "id": "low-quality-01",
+      "category": "low-quality",
+      "variant": "Auto",
+      "beforeCER": 0.9900960384153662,
+      "afterCER": 0.9900960384153662,
+      "deltaCER": 0
+    },
+    {
+      "id": "low-quality-02",
+      "category": "low-quality",
+      "variant": "Auto",
+      "beforeCER": 0.5051270619705751,
+      "afterCER": 0.5051270619705751,
+      "deltaCER": 0
+    },
+    {
+      "id": "low-quality-03",
+      "category": "low-quality",
+      "variant": "Auto",
+      "beforeCER": 0.7563188593648736,
+      "afterCER": 0.7563188593648736,
+      "deltaCER": 0
+    },
+    {
+      "id": "low-quality-04",
+      "category": "low-quality",
+      "variant": "Auto",
+      "beforeCER": 0.6100601261181992,
+      "afterCER": 0.6100601261181992,
+      "deltaCER": 0
+    },
+    {
+      "id": "low-quality-05",
+      "category": "low-quality",
+      "variant": "Auto",
+      "beforeCER": 1,
+      "afterCER": 1,
+      "deltaCER": 0
+    }
+  ],
+  "manualChecks": {
+    "measured": 156,
+    "identicalMetrics": 156
+  },
+  "pixelsEqual": 50
+}

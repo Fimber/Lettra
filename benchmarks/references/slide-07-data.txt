@@ -1,0 +1,15 @@
+Read the units before the numbers
+
+Working with tables / Example 07
+
+Distance: 12.5 kilometres
+Time: 48 minutes
+Average speed: 15.625 kilometres per hour
+
+A number without its unit can be misleading.
+Check the column heading and any note below the table.
+
+When rounding a result, keep enough precision for the decision.
+Do not add decimal places that were absent from the measurement.
+
+Record the original value before changing its display format.

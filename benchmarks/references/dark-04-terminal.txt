@@ -1,0 +1,20 @@
+Session output
+
+Terminal / example commands
+
+$ node scripts/check-files.mjs ./incoming
+Found 18 files in ./incoming
+Checking file types and dimensions...
+PASS: page_01.png (1920 x 1080)
+PASS: page_02.jpg (2400 x 3200)
+SKIP: notes.txt (unsupported image type)
+WARN: receipt_07.png has a low contrast range
+
+Summary: 16 accepted, 1 skipped, 1 warning
+Elapsed time: 0.84 seconds
+Output: ./reports/file-check_2026-11-03.json
+
+$ echo "Review the warning before continuing."
+Review the warning before continuing.
+
+No files were deleted or uploaded by this example.

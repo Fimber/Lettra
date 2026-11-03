@@ -1,0 +1,406 @@
+{
+  "browser": "Desktop Chrome",
+  "scope": "Old ImageBitmap/OffscreenCanvas ingress versus new ImageData ingress after the same opaque, EXIF-aware normalization. The four manual preset algorithms are unchanged.",
+  "results": [
+    {
+      "id": "clean-01-article",
+      "width": 1440,
+      "height": 960,
+      "bytesCompared": 5529600,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "clean-02-letter",
+      "width": 1280,
+      "height": 960,
+      "bytesCompared": 4915200,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "clean-03-chat",
+      "width": 1280,
+      "height": 900,
+      "bytesCompared": 4608000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "clean-04-code",
+      "width": 1440,
+      "height": 900,
+      "bytesCompared": 5184000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "clean-05-config",
+      "width": 1440,
+      "height": 900,
+      "bytesCompared": 5184000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "clean-06-log",
+      "width": 1440,
+      "height": 900,
+      "bytesCompared": 5184000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "clean-07-numbers",
+      "width": 1440,
+      "height": 900,
+      "bytesCompared": 5184000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "clean-08-checklist",
+      "width": 1280,
+      "height": 900,
+      "bytesCompared": 4608000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "clean-09-help",
+      "width": 1440,
+      "height": 960,
+      "bytesCompared": 5529600,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "clean-10-research",
+      "width": 1440,
+      "height": 960,
+      "bytesCompared": 5529600,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "dark-01-code",
+      "width": 1440,
+      "height": 960,
+      "bytesCompared": 5529600,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "dark-02-chat",
+      "width": 1280,
+      "height": 900,
+      "bytesCompared": 4608000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "dark-03-notes",
+      "width": 1440,
+      "height": 960,
+      "bytesCompared": 5529600,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "dark-04-terminal",
+      "width": 1440,
+      "height": 900,
+      "bytesCompared": 5184000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "dark-05-status",
+      "width": 1440,
+      "height": 900,
+      "bytesCompared": 5184000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "slide-01-workshop",
+      "width": 1440,
+      "height": 960,
+      "bytesCompared": 5529600,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "slide-02-safety",
+      "width": 1280,
+      "height": 960,
+      "bytesCompared": 4915200,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "slide-03-lecture",
+      "width": 1600,
+      "height": 900,
+      "bytesCompared": 5760000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "slide-04-library",
+      "width": 1440,
+      "height": 960,
+      "bytesCompared": 5529600,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "slide-05-checkpoints",
+      "width": 1600,
+      "height": 900,
+      "bytesCompared": 5760000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "slide-06-market",
+      "width": 1280,
+      "height": 960,
+      "bytesCompared": 4915200,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "slide-07-data",
+      "width": 1600,
+      "height": 900,
+      "bytesCompared": 5760000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "language-01-french",
+      "width": 1440,
+      "height": 960,
+      "bytesCompared": 5529600,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "language-02-yoruba",
+      "width": 1440,
+      "height": 960,
+      "bytesCompared": 5529600,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "language-03-spanish",
+      "width": 1440,
+      "height": 960,
+      "bytesCompared": 5529600,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "language-04-german",
+      "width": 1440,
+      "height": 960,
+      "bytesCompared": 5529600,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "language-05-portuguese",
+      "width": 1440,
+      "height": 960,
+      "bytesCompared": 5529600,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "sroie-001",
+      "width": 439,
+      "height": 1004,
+      "bytesCompared": 1763024,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "sroie-073",
+      "width": 615,
+      "height": 931,
+      "bytesCompared": 2290260,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "sroie-146",
+      "width": 936,
+      "height": 2283,
+      "bytesCompared": 8547552,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "sroie-219",
+      "width": 813,
+      "height": 1337,
+      "bytesCompared": 4347924,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "sroie-292",
+      "width": 1650,
+      "height": 2630,
+      "bytesCompared": 17358000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "sroie-365",
+      "width": 620,
+      "height": 1176,
+      "bytesCompared": 2916480,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "sroie-438",
+      "width": 1650,
+      "height": 2850,
+      "bytesCompared": 18810000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "sroie-511",
+      "width": 587,
+      "height": 1783,
+      "bytesCompared": 4186484,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "phone-photo-01",
+      "width": 2250,
+      "height": 3000,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "phone-photo-02",
+      "width": 3000,
+      "height": 2250,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "phone-photo-03",
+      "width": 2250,
+      "height": 3000,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "phone-photo-04",
+      "width": 2250,
+      "height": 3000,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "phone-photo-05",
+      "width": 2250,
+      "height": 3000,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "phone-photo-06",
+      "width": 2250,
+      "height": 3000,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "phone-photo-07",
+      "width": 2250,
+      "height": 3000,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "phone-photo-08",
+      "width": 2250,
+      "height": 3000,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "phone-photo-09",
+      "width": 3000,
+      "height": 2250,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "phone-photo-10",
+      "width": 2250,
+      "height": 3000,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "low-quality-01",
+      "width": 2250,
+      "height": 3000,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "low-quality-02",
+      "width": 2250,
+      "height": 3000,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "low-quality-03",
+      "width": 2250,
+      "height": 3000,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "low-quality-04",
+      "width": 3000,
+      "height": 2250,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    },
+    {
+      "id": "low-quality-05",
+      "width": 3000,
+      "height": 2250,
+      "bytesCompared": 27000000,
+      "differingChannels": 0,
+      "equal": true
+    }
+  ]
+}

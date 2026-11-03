@@ -1,0 +1,24 @@
+application.json
+
+Configuration example / development
+
+{
+  "application": "sample-reader",
+  "environment": "development",
+  "server": {
+    "host": "127.0.0.1",
+    "port": 8080,
+    "request_timeout_ms": 15000
+  },
+  "features": {
+    "offline_cache": true,
+    "keep_recent_files": false,
+    "allowed_types": ["png", "jpeg", "webp"]
+  },
+  "limits": {
+    "maximum_bytes": 15728640,
+    "maximum_pixels": 40000000,
+    "retry_count": 3
+  },
+  "message": "Check settings before starting a new session."
+}

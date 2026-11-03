@@ -22,19 +22,20 @@ self.onmessage = async ({ data }) => {
   const hold = (x) => (mats.push(x), x);
   try {
     const cv = await loadCV();
-    const input = data.bitmap;
-    const surface = new OffscreenCanvas(input.width, input.height),
-      context = surface.getContext("2d");
-    context.drawImage(input, 0, 0);
-    input.close();
-    let img = hold(
-      cv.matFromImageData(
-        context.getImageData(0, 0, surface.width, surface.height),
-      ),
-    );
+    // Transfer pixel buffers rather than requiring OffscreenCanvas in workers.
+    // This also supports WebKit implementations without worker canvas APIs.
+    let img = hold(cv.matFromImageData(data.pixels));
     const steps = { ...data.steps };
     const gray = hold(new cv.Mat());
     cv.cvtColor(img, gray, cv.COLOR_RGBA2GRAY);
+    const histogram = new Uint32Array(256);
+    let sampled = 0;
+    for (let i = 0; i < gray.data.length; i += 17) {
+      histogram[gray.data[i]]++;
+      sampled++;
+    }
+    const peaks = Array.from(histogram).sort((a, b) => b - a);
+    const screenLike = (peaks[0] + peaks[1] + peaks[2]) / sampled > 0.82;
     if (data.preset === "auto") {
       const colors = new Set();
       let min = 255,
@@ -64,8 +65,18 @@ self.onmessage = async ({ data }) => {
           }
         }
       const photo = colors.size > 45 && max - min > 35;
-      steps.denoise = photo;
-      steps.threshold = photo ? "adaptive" : "otsu";
+      // Preserve antialiased light screens; dark screens retain binarization.
+      // Camera photos keep adaptive cleanup: removing it severely regressed
+      // multicolumn page segmentation in the frozen photograph benchmark.
+      steps.denoise = !screenLike && photo;
+      steps.threshold = screenLike
+        ? cv.mean(gray)[0] < 110
+          ? "otsu"
+          : "none"
+        : photo
+          ? "adaptive"
+          : "otsu";
+      if (screenLike) steps.deskew = false;
     }
     if (
       steps.grayscale ||
@@ -257,16 +268,17 @@ self.onmessage = async ({ data }) => {
     const rgba = hold(new cv.Mat());
     if (img.channels() === 1) cv.cvtColor(img, rgba, cv.COLOR_GRAY2RGBA);
     else img.copyTo(rgba);
-    const output = new OffscreenCanvas(rgba.cols, rgba.rows);
-    output
-      .getContext("2d")
-      .putImageData(
-        new ImageData(new Uint8ClampedArray(rgba.data), rgba.cols, rgba.rows),
-        0,
-        0,
-      );
-    const bitmap = output.transferToImageBitmap();
-    self.postMessage({ id: data.id, bitmap }, [bitmap]);
+    const pixels = new Uint8ClampedArray(rgba.data);
+    self.postMessage(
+      {
+        id: data.id,
+        pixels,
+        width: rgba.cols,
+        height: rgba.rows,
+        analysis: { screenLike },
+      },
+      [pixels.buffer],
+    );
   } catch (error) {
     self.postMessage({
       id: data.id,

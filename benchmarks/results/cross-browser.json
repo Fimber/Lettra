@@ -1,0 +1,46 @@
+[
+  {
+    "engine": "firefox",
+    "physicalPhone": false,
+    "description": "Desktop browser engine on Windows, 390px touch viewport; not Safari/iPhone hardware",
+    "checks": [
+      "A printed page: local OCR",
+      "Edit and undo",
+      "Touch-sized settings sheet",
+      "TXT download",
+      "No mobile-width overflow",
+      "A dark screenshot: local OCR"
+    ],
+    "errors": [],
+    "version": "157.0",
+    "capabilities": {
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:157.0) Gecko/20100101 Firefox/157.0",
+      "offscreen": true,
+      "imageBitmap": true,
+      "serviceWorker": true
+    },
+    "status": "passed"
+  },
+  {
+    "engine": "webkit",
+    "physicalPhone": false,
+    "description": "Desktop browser engine on Windows, 390px touch viewport; not Safari/iPhone hardware",
+    "checks": [
+      "A printed page: local OCR",
+      "Edit and undo",
+      "Touch-sized settings sheet",
+      "TXT download",
+      "No mobile-width overflow",
+      "A dark screenshot: local OCR"
+    ],
+    "errors": [],
+    "version": "27.2",
+    "capabilities": {
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+      "offscreen": false,
+      "imageBitmap": true,
+      "serviceWorker": true
+    },
+    "status": "passed"
+  }
+]
