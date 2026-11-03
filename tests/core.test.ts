@@ -3,6 +3,14 @@ import { cleanText } from "../src/lib/cleanup";
 import { inspectHeader } from "../src/lib/input";
 import { defaults, applyPreset } from "../src/lib/settings";
 describe("predictable text cleanup", () => {
+  it("preserves meaningful symbol prefixes in code", () =>
+    expect(cleanText("_private\n~value\n|operator", defaults.cleanup)).toBe(
+      "_private\n~value\n|operator",
+    ));
+  it("removes only separated edge noise", () =>
+    expect(cleanText("| a sentence ~\n_\nmore text", defaults.cleanup)).toBe(
+      "a sentence\n\nmore text",
+    ));
   it("joins line-end hyphens without replacing names or code", () =>
     expect(cleanText("informa-\ntion\nOpenAI foo_bar", defaults.cleanup)).toBe(
       "information\nOpenAI foo_bar",

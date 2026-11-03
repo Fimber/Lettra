@@ -9,7 +9,7 @@ export function cleanText(
     text = text.replace(/(\p{L})-\n[ \t]*(\p{Ll})/gu, "$1$2");
   if (rules.stripNoise)
     text = text.replace(
-      /^[ \t]*[|~_´]+[ \t]*(?=\S)|(?<=\S)[ \t]+[|~_´]+[ \t]*$/gm,
+      /^[ \t]*[|~_´]+(?:[ \t]+|$)|(?<=\S)[ \t]+[|~_´]+[ \t]*$/gm,
       "",
     );
   if (rules.mergeLines) text = text.replace(/([^.!?:\n])\n(?=\p{Ll})/gu, "$1 ");
