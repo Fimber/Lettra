@@ -33,9 +33,21 @@ if (!files.length)
 const browser = await chromium.launch({ channel: "chrome", headless: true });
 const page = await browser.newPage();
 const rows = [
-  ["image", "preset", "CER", "WER", "seconds", "confidence", "status"],
+  [
+    "image",
+    "preset",
+    "CER",
+    "WER",
+    "number_token_error_rate",
+    "numbers_exact",
+    "seconds",
+    "reader_score",
+    "status",
+  ],
 ];
 const normalize = (text) => text.trim().replace(/\s+/g, " ");
+// Compare ordered number tokens so substitutions, omissions and extra amounts count.
+const numbers = (text) => text.match(/[+-]?\d+(?:[.,:/-]\d+)*/g) || [];
 try {
   await page.goto(process.env.LETTRA_URL || "http://127.0.0.1:3000");
   await page.getByRole("button", { name: /Improve your result/ }).click();
@@ -76,14 +88,20 @@ try {
       );
       const words = truth.split(/\s+/),
         actual = text ? text.split(/\s+/) : [];
+      const expectedNumbers = numbers(truth),
+        actualNumbers = numbers(text);
       rows.push([
         filename,
         preset,
         distance([...truth], [...text]) / Math.max(1, [...truth].length),
         distance(words, actual) / Math.max(1, words.length),
+        expectedNumbers.length
+          ? distance(expectedNumbers, actualNumbers) / expectedNumbers.length
+          : "",
+        JSON.stringify(expectedNumbers) === JSON.stringify(actualNumbers),
         ((performance.now() - start) / 1000).toFixed(3),
         await page
-          .locator(".confidence")
+          .locator(".review-summary span")
           .textContent()
           .catch(() => ""),
         error || "ok",

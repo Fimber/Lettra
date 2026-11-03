@@ -1,7 +1,16 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+  useReducer,
+} from "react";
+import {
+  Undo2,
+  Redo2,
   Upload,
   ArrowUpRight,
   ArrowRight,
@@ -48,7 +57,19 @@ import {
   type Preset,
   type Steps,
 } from "@/lib/settings";
-import { cleanText } from "@/lib/cleanup";
+import {
+  editorReducer,
+  initialHistory,
+  emptyDocument,
+  editDocument,
+  anchorsForOutput,
+  outputText,
+  type EditorDocument,
+  type OutputMode,
+} from "@/lib/editor";
+import { ImageViewer } from "@/components/ImageViewer";
+import { WordReview } from "@/components/WordReview";
+import { SettingsSheet } from "@/components/SettingsSheet";
 import { normalizeFile, rotateCanvas } from "@/lib/input";
 import {
   preprocess,
@@ -59,11 +80,6 @@ import {
 import { sampleFile, type Sample } from "@/lib/samples";
 import { EditableText } from "@/components/EditableText";
 
-type Result = {
-  text: string;
-  confidence: number;
-  words: { text: string; confidence: number }[];
-};
 type Recent = {
   name: string;
   text: string;
@@ -123,6 +139,7 @@ function Modal({
     <dialog
       ref={ref}
       className={`modal ${wide ? "wide" : ""}`}
+      aria-label={title}
       onCancel={onClose}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -157,12 +174,23 @@ export default function Home() {
   const [cleanUrl, setCleanUrl] = useState("");
   const [name, setName] = useState("");
   const [size, setSize] = useState(0);
-  const [result, setResult] = useState<Result | null>(null);
-  const [text, setText] = useState("");
+  const [editor, dispatch] = useReducer(editorReducer, initialHistory);
+  const doc = editor.present,
+    result = doc.result,
+    text = doc.text,
+    elapsed = doc.elapsed;
+  const [candidate, setCandidate] = useState<EditorDocument | null>(null);
+  const [outputMode, setOutputMode] = useState<OutputMode>("preserve");
+  const [activeId, setActiveId] = useState<number | null>(null);
+  const [reviewFilter, setReviewFilter] = useState<"uncertain" | "numbers">(
+    "uncertain",
+  );
+  const [split, setSplit] = useState(48);
+  const workspace = useRef<HTMLElement>(null);
+  const closeSettings = useCallback(() => setImprove(false), []);
   const [busy, setBusy] = useState(false);
   const [stage, setStage] = useState("");
   const [progress, setProgress] = useState(0);
-  const [elapsed, setElapsed] = useState(0);
   const [error, setError] = useState("");
   const [toast, setToast] = useState("");
   const [tab, setTab] = useState<"original" | "cleaned" | "compare">(
@@ -174,7 +202,7 @@ export default function Home() {
   const [showRaw, setShowRaw] = useState(false);
   const [review, setReview] = useState(false);
   const [modal, setModal] = useState<
-    "help" | "privacy" | "history" | "crop" | "zoom" | null
+    "help" | "privacy" | "history" | "crop" | "zoom" | "compare" | null
   >(null);
   const [crop, setCrop] = useState<CropArea>();
   const cropImage = useRef<HTMLImageElement>(null);
@@ -190,14 +218,56 @@ export default function Home() {
     key: string;
     canvas: HTMLCanvasElement;
   } | null>(null);
-  const state = useRef({ settings, historyOn });
-  state.current = { settings, historyOn };
+  const state = useRef({ settings, historyOn, doc, outputMode });
+  state.current = { settings, historyOn, doc, outputMode };
   const shown = showRaw ? (result?.text ?? "") : text;
   const words = shown.trim() ? shown.trim().split(/\s+/).length : 0;
   const uncertain = useMemo(
     () => result?.words.filter((w) => w.confidence < 60) ?? [],
     [result],
   );
+  const numericWords = useMemo(
+    () => result?.words.filter((w) => /\d/.test(w.text)) ?? [],
+    [result],
+  );
+  const reviewWords = (
+    reviewFilter === "numbers" ? numericWords : uncertain
+  ).filter((w) => !doc.reviewed.includes(w.id));
+  const activeWord = reviewWords.find((w) => w.id === activeId) ?? null;
+  const activeAnchor = doc.anchors.find((a) => a.id === activeId);
+  const activeIndex = reviewWords.findIndex((w) => w.id === activeId);
+  const remaining = uncertain.filter((w) => !doc.reviewed.includes(w.id));
+  useEffect(() => {
+    if (!doc.result) return;
+    setSource(doc.source);
+    setSourceUrl(doc.sourceUrl);
+    setCleanUrl(doc.imageUrl);
+    setName(doc.name);
+    setSize(doc.size);
+    setActiveId(null);
+    setReview(false);
+    setOutputMode(doc.outputMode);
+    setSettings((s) => ({ ...s, numbersOnly: doc.outputMode === "numbers" }));
+  }, [
+    doc.result,
+    doc.source,
+    doc.sourceUrl,
+    doc.imageUrl,
+    doc.name,
+    doc.size,
+    doc.outputMode,
+  ]);
+  useEffect(() => {
+    if (!review) return;
+    const key = (e: KeyboardEvent) => {
+      if (e.altKey && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
+        e.preventDefault();
+        moveReview(e.key === "ArrowRight" ? 1 : -1);
+      }
+    };
+    document.addEventListener("keydown", key);
+    return () => document.removeEventListener("keydown", key);
+  }, [review, activeId, reviewWords]);
   useEffect(() => {
     try {
       const enabled = localStorage.getItem("lettra-history-enabled") === "true";
@@ -254,13 +324,16 @@ export default function Home() {
       filename: string,
       s: Settings,
       id = ++runId.current,
+      fileSize = state.current.doc.size,
+      mode = state.current.outputMode,
     ) => {
+      s = { ...s, numbersOnly: mode === "numbers" };
       setBusy(true);
       setError("");
       setProgress(0);
       setStage("Preparing your image");
-      setResult(null);
-      setText("");
+      const previous = state.current.doc;
+      setCandidate(null);
       setShowRaw(false);
       setReview(false);
       const start = performance.now();
@@ -288,7 +361,8 @@ export default function Home() {
           cache.current = { source: canvas, key, canvas: cleaned };
         }
         if (id !== runId.current) return;
-        setCleanUrl(cleaned.toDataURL("image/png"));
+        const imageUrl = cleaned.toDataURL("image/png");
+        if (!previous.result) setCleanUrl(imageUrl);
         const warmError = await warming;
         if (warmError) throw warmError;
         setStage("Reading your image");
@@ -300,22 +374,43 @@ export default function Home() {
           }
         });
         if (id !== runId.current) return;
-        setResult(data);
-        const value = cleanText(data.text, s.cleanup, s.numbersOnly);
-        setText(value);
-        setElapsed((performance.now() - start) / 1000);
+        const value = outputText(data.text, s, mode);
+        const next: EditorDocument = {
+          text: value,
+          result: data,
+          anchors: anchorsForOutput(data.words, data.text, value),
+          reviewed: [],
+          imageUrl,
+          width: cleaned.width,
+          height: cleaned.height,
+          source: canvas,
+          sourceUrl: canvas.toDataURL("image/png"),
+          name: filename,
+          size: fileSize,
+          elapsed: (performance.now() - start) / 1000,
+          outputMode: mode,
+        };
+        if (previous.result) {
+          setCandidate(next);
+          setModal("compare");
+          setStage(
+            "New result ready to compare. Your current text is unchanged.",
+          );
+        } else {
+          dispatch({ type: "reset", document: next });
+          setStage(value ? "Your text is ready" : "No text detected");
+          saveRecent(filename, value, data.confidence, next.elapsed);
+        }
         setProgress(100);
-        setStage(value ? "Your text is ready" : "No text detected");
-        saveRecent(
-          filename,
-          value,
-          data.confidence,
-          (performance.now() - start) / 1000,
-        );
       } catch (e) {
         if (id !== runId.current) return;
         const message =
           e instanceof Error ? e.message : "Could not read this image.";
+        setOutputMode(state.current.doc.outputMode);
+        setSettings((s) => ({
+          ...s,
+          numbersOnly: state.current.doc.outputMode === "numbers",
+        }));
         setError(
           /memory|allocation/i.test(message)
             ? "This image is too large for this device. Crop it or use a smaller version."
@@ -339,14 +434,16 @@ export default function Home() {
       try {
         const canvas = await normalizeFile(file);
         if (id !== runId.current) return;
-        setSource(canvas);
-        setSourceUrl(canvas.toDataURL("image/png"));
-        setCleanUrl("");
-        setName(file.name);
-        setSize(file.size);
+        if (!state.current.doc.result) {
+          setSource(canvas);
+          setSourceUrl(canvas.toDataURL("image/png"));
+          setCleanUrl("");
+          setName(file.name);
+          setSize(file.size);
+        }
         setTab("original");
         cache.current = null;
-        await extract(canvas, file.name, state.current.settings, id);
+        await extract(canvas, file.name, state.current.settings, id, file.size);
       } catch (e) {
         if (id === runId.current) {
           setError(
@@ -434,8 +531,11 @@ export default function Home() {
     setSource(null);
     setSourceUrl("");
     setCleanUrl("");
-    setResult(null);
-    setText("");
+    dispatch({ type: "reset", document: emptyDocument });
+    setCandidate(null);
+    setActiveId(null);
+    setReview(false);
+    setModal(null);
     setError("");
     setBusy(false);
     cache.current = null;
@@ -448,7 +548,7 @@ export default function Home() {
     );
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${name.replace(/\.[^.]+$/, "") || "lettra"}.txt`;
+    a.download = `${(doc.name || name).replace(/\.[^.]+$/, "") || "lettra"}.txt`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     setToast("Text downloaded.");
@@ -463,13 +563,155 @@ export default function Home() {
       steps: { ...s.steps, [key]: value },
     }));
   }
-  function changeCleanup(key: keyof Settings["cleanup"], value: boolean) {
-    const next = { ...settings.cleanup, [key]: value };
-    setSettings((s) => ({ ...s, cleanup: next }));
-    if (result) {
-      setText(cleanText(result.text, next, settings.numbersOnly));
-      setToast("Cleanup applied to the original OCR text.");
+  function propose(next: EditorDocument) {
+    if (next.text === doc.text) {
+      dispatch({ type: "commit", document: next });
+      setToast("The text is already in this format.");
+      return;
     }
+    setImprove(false);
+    setCandidate(next);
+    setModal("compare");
+  }
+  function changeCleanup(key: keyof Settings["cleanup"], value: boolean) {
+    const nextSettings = {
+      ...settings,
+      cleanup: { ...settings.cleanup, [key]: value },
+    };
+    setSettings(nextSettings);
+    setOutputMode("custom");
+    if (result) {
+      const value = outputText(result.text, nextSettings, "custom");
+      propose({
+        ...doc,
+        text: value,
+        anchors: anchorsForOutput(result.words, result.text, value),
+        reviewed: [],
+        outputMode: "custom",
+      });
+    }
+  }
+  function changeOutput(mode: OutputMode) {
+    const nextSettings = { ...settings, numbersOnly: mode === "numbers" };
+    setSettings(nextSettings);
+    setOutputMode(mode);
+    if (!result) return;
+    if (mode === "numbers" || settings.numbersOnly) {
+      setImprove(false);
+      if (source)
+        void extract(source, name, nextSettings, undefined, doc.size, mode);
+      else {
+        setOutputMode(doc.outputMode);
+        setSettings((s) => ({
+          ...s,
+          numbersOnly: doc.outputMode === "numbers",
+        }));
+        setToast("Add the original image to change recognition mode.");
+      }
+      return;
+    }
+    const value = outputText(result.text, nextSettings, mode);
+    propose({
+      ...doc,
+      text: value,
+      anchors: anchorsForOutput(result.words, result.text, value),
+      reviewed: [],
+      outputMode: mode,
+    });
+  }
+  function acceptCandidate() {
+    if (!candidate) return;
+    dispatch({ type: "commit", document: candidate });
+    saveRecent(
+      candidate.name,
+      candidate.text,
+      candidate.result?.confidence ?? 0,
+      candidate.elapsed,
+    );
+    setCandidate(null);
+    setModal(null);
+    setShowRaw(false);
+    setToast("New result applied. Undo will restore your previous version.");
+  }
+  function dismissCandidate() {
+    setCandidate(null);
+    setModal(null);
+    setOutputMode(doc.outputMode);
+    setSettings((s) => ({ ...s, numbersOnly: doc.outputMode === "numbers" }));
+    setToast("Your text and corrections are unchanged.");
+  }
+  function editText(value: string) {
+    dispatch({ type: "edit", text: value, at: Date.now() });
+  }
+  function undo() {
+    dispatch({ type: "undo" });
+    setShowRaw(false);
+  }
+  function cancelExtraction() {
+    ++runId.current;
+    cancelReader();
+    setBusy(false);
+    if (result) {
+      setOutputMode(doc.outputMode);
+      setSettings((s) => ({ ...s, numbersOnly: doc.outputMode === "numbers" }));
+    }
+    setStage("Extraction cancelled. Your current work is unchanged.");
+    setToast("Extraction cancelled. Your current work is unchanged.");
+  }
+  function redo() {
+    dispatch({ type: "redo" });
+    setShowRaw(false);
+  }
+  function startReview(
+    id?: number,
+    filter: "uncertain" | "numbers" = reviewFilter,
+  ) {
+    const list = (filter === "numbers" ? numericWords : uncertain).filter(
+      (w) => !doc.reviewed.includes(w.id),
+    );
+    setReviewFilter(filter);
+    setReview(true);
+    setActiveId(id ?? list[0]?.id ?? null);
+    setShowRaw(false);
+    setTab("cleaned");
+  }
+  function moveReview(direction: number) {
+    if (!reviewWords.length) return;
+    setActiveId(
+      reviewWords[
+        (Math.max(0, activeIndex) + direction + reviewWords.length) %
+          reviewWords.length
+      ].id,
+    );
+  }
+  function finishWord(replacement?: string) {
+    if (!activeWord) return;
+    let next = doc;
+    if (replacement !== undefined && activeAnchor)
+      next = editDocument(
+        doc,
+        doc.text.slice(0, activeAnchor.start) +
+          replacement +
+          doc.text.slice(activeAnchor.end),
+      );
+    next = { ...next, reviewed: [...next.reviewed, activeWord.id] };
+    dispatch({ type: "commit", document: next });
+    const remaining = reviewWords.filter((w) => w.id !== activeWord.id);
+    setActiveId(
+      remaining[Math.min(activeIndex, remaining.length - 1)]?.id ?? null,
+    );
+    if (!remaining.length)
+      setToast("Review complete. You can still edit any word.");
+  }
+  function resizeWorkspace(clientX: number) {
+    const bounds = workspace.current?.getBoundingClientRect();
+    if (bounds)
+      setSplit(
+        Math.max(
+          32,
+          Math.min(68, ((clientX - bounds.left) / bounds.width) * 100),
+        ),
+      );
   }
   async function demo(kind: Sample) {
     const file = await sampleFile(kind);
@@ -478,10 +720,7 @@ export default function Home() {
   function rotate() {
     if (!source) return;
     const canvas = rotateCanvas(source);
-    setSource(canvas);
-    setSourceUrl(canvas.toDataURL("image/png"));
-    setCleanUrl("");
-    setTab("original");
+    setActiveId(null);
     void extract(canvas, name, settings);
   }
   function applyCrop() {
@@ -506,10 +745,7 @@ export default function Home() {
         canvas.width,
         canvas.height,
       );
-    setSource(canvas);
-    setSourceUrl(canvas.toDataURL("image/png"));
-    setCleanUrl("");
-    setTab("original");
+    setActiveId(null);
     setModal(null);
     void extract(canvas, name, settings);
   }
@@ -525,13 +761,6 @@ export default function Home() {
       setToast("Local storage is unavailable in this browser.");
     }
   }
-  const confidence = result
-    ? result.confidence >= 80
-      ? "Good"
-      : result.confidence >= 60
-        ? "Fair"
-        : "Poor"
-    : "";
   return (
     <>
       <header className="header">
@@ -557,20 +786,39 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <main>
-        <section className="intro">
-          <div className="eyebrow">
-            <span /> A LITTLE TOOL FOR YOUR EVERYDAY
-          </div>
-          <h1>
-            Your images, <em>in words.</em>
-          </h1>
-          <p>
-            Get the text you need from the images you have.
-            <br className="mobile-break" /> Fast, free, and entirely on your
-            device.
-          </p>
-        </section>
+      <main className={source || result ? "has-document" : ""}>
+        {!source && !result ? (
+          <section className="intro">
+            <div className="eyebrow">
+              <span /> A LITTLE TOOL FOR YOUR EVERYDAY
+            </div>
+            <h1>
+              Your images, <em>in words.</em>
+            </h1>
+            <p>
+              Get the text you need from the images you have.
+              <br className="mobile-break" /> Fast, free, and entirely on your
+              device.
+            </p>
+          </section>
+        ) : (
+          <section className="session-heading">
+            <div>
+              <span className="eyebrow">YOUR PRIVATE WORKSPACE</span>
+              <h1>
+                A clearer view of <em>your words.</em>
+              </h1>
+            </div>
+            <button
+              className="secondary"
+              disabled={busy}
+              onClick={() => input.current?.click()}
+            >
+              <Plus size={17} />
+              New image
+            </button>
+          </section>
+        )}
         <div className="workspace-top">
           <div className="workspace-label">
             <ScanText size={17} /> IMAGE TO TEXT{" "}
@@ -615,7 +863,63 @@ export default function Home() {
             </label>
           </div>
         </div>
-        <section className="workspace" aria-label="Image to text workspace">
+        <div className="quick-settings">
+          <div className="quick-presets">
+            <span>Image type</span>
+            {(["auto", "screenshot", "document", "receipt"] as const).map(
+              (key) => {
+                const Icon = presetIcons[key];
+                return (
+                  <button
+                    key={key}
+                    aria-label={"Use " + presets[key].label + " preset"}
+                    aria-pressed={settings.preset === key}
+                    disabled={busy}
+                    onClick={() => setSettings((s) => applyPreset(s, key))}
+                  >
+                    <Icon size={16} />
+                    {presets[key].label}
+                  </button>
+                );
+              },
+            )}
+          </div>
+          <button
+            className="settings-shortcut secondary"
+            onClick={() => setImprove(true)}
+          >
+            <SlidersHorizontal size={16} />
+            Settings
+          </button>
+          {source && (
+            <button
+              className="primary quick-run"
+              disabled={busy}
+              onClick={() => extract(source, name, settings)}
+            >
+              <RefreshCw size={16} />
+              Run again
+            </button>
+          )}
+        </div>
+        {!source && (
+          <button
+            className="mobile-camera-primary secondary"
+            disabled={busy}
+            onClick={() => camera.current?.click()}
+          >
+            <Camera size={19} />
+            Take a photo
+          </button>
+        )}
+        <section
+          ref={workspace}
+          className="workspace"
+          style={{
+            gridTemplateColumns: split + "fr 10px " + (100 - split) + "fr",
+          }}
+          aria-label="Image to text workspace"
+        >
           <div className="image-panel">
             <div className="panel-heading">
               <div className="panel-title">
@@ -717,7 +1021,10 @@ export default function Home() {
                       <button
                         key={t}
                         className={tab === t ? "active" : ""}
-                        onClick={() => setTab(t)}
+                        onClick={() => {
+                          setTab(t);
+                          setActiveId(null);
+                        }}
                         disabled={t !== "original" && !cleanUrl}
                       >
                         {t === "compare"
@@ -758,27 +1065,37 @@ export default function Home() {
                   </div>
                 </div>
                 <div
-                  className={`image-canvas ${tab === "compare" ? "compare" : ""}`}
+                  className={
+                    "image-canvas " + (tab === "compare" ? "compare" : "")
+                  }
                 >
-                  <figure>
-                    <img
-                      src={tab === "cleaned" ? cleanUrl : sourceUrl}
+                  {tab === "compare" ? (
+                    <>
+                      <ImageViewer
+                        url={sourceUrl}
+                        alt="Original uploaded image"
+                      />
+                      <ImageViewer
+                        url={cleanUrl}
+                        alt="Cleaned image used for recognition"
+                      />
+                    </>
+                  ) : (
+                    <ImageViewer
+                      url={
+                        activeWord
+                          ? doc.imageUrl
+                          : tab === "cleaned"
+                            ? cleanUrl
+                            : sourceUrl
+                      }
                       alt={
                         tab === "cleaned"
                           ? "Cleaned image used for recognition"
                           : "Original uploaded image"
                       }
+                      word={activeWord}
                     />
-                    {tab === "compare" && <figcaption>Original</figcaption>}
-                  </figure>
-                  {tab === "compare" && (
-                    <figure>
-                      <img
-                        src={cleanUrl}
-                        alt="Cleaned image used for recognition"
-                      />
-                      <figcaption>Cleaned</figcaption>
-                    </figure>
                   )}
                   {busy && <div className="scanning-line" />}
                 </div>
@@ -807,6 +1124,44 @@ export default function Home() {
               </button>
             </div>
           </div>
+          <div
+            className="workspace-divider"
+            role="separator"
+            aria-label="Resize image and text panels"
+            aria-orientation="vertical"
+            aria-valuemin={32}
+            aria-valuemax={68}
+            aria-valuenow={Math.round(split)}
+            tabIndex={0}
+            onPointerDown={(e) => {
+              e.currentTarget.setPointerCapture(e.pointerId);
+              resizeWorkspace(e.clientX);
+            }}
+            onPointerMove={(e) => {
+              if (e.currentTarget.hasPointerCapture(e.pointerId))
+                resizeWorkspace(e.clientX);
+            }}
+            onKeyDown={(e) => {
+              if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) {
+                e.preventDefault();
+                setSplit(
+                  e.key === "Home"
+                    ? 32
+                    : e.key === "End"
+                      ? 68
+                      : Math.max(
+                          32,
+                          Math.min(
+                            68,
+                            split + (e.key === "ArrowRight" ? 3 : -3),
+                          ),
+                        ),
+                );
+              }
+            }}
+          >
+            <span />
+          </div>
           <div className="text-panel">
             <div className="panel-heading">
               <div className="panel-title">
@@ -815,7 +1170,7 @@ export default function Home() {
               </div>
               <div className="output-actions">
                 <button
-                  disabled={!shown || busy}
+                  disabled={!shown}
                   onClick={copy}
                   className="copy-button"
                 >
@@ -823,7 +1178,7 @@ export default function Home() {
                   Copy
                 </button>
                 <button
-                  disabled={!shown || busy}
+                  disabled={!shown}
                   onClick={download}
                   className="icon-button"
                   title="Download text"
@@ -842,7 +1197,54 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            {busy ? (
+            <div className="editor-toolbar">
+              <label>
+                Output
+                <select
+                  aria-label="Output format"
+                  value={outputMode}
+                  disabled={busy}
+                  onChange={(e) => changeOutput(e.target.value as OutputMode)}
+                >
+                  <option value="preserve">Preserve formatting</option>
+                  <option value="paragraphs">Clean paragraphs</option>
+                  <option value="numbers" disabled={!source && !!result}>
+                    Numbers only
+                  </option>
+                  {outputMode === "custom" && (
+                    <option value="custom">Custom cleanup</option>
+                  )}
+                </select>
+              </label>
+              <div className="undo-controls">
+                <button
+                  aria-label="Undo edit"
+                  title="Undo (Ctrl / ⌘ Z)"
+                  disabled={!editor.past.length || busy}
+                  onClick={undo}
+                >
+                  <Undo2 size={18} />
+                </button>
+                <button
+                  aria-label="Redo edit"
+                  title="Redo (Ctrl / ⌘ Shift Z)"
+                  disabled={!editor.future.length || busy}
+                  onClick={redo}
+                >
+                  <Redo2 size={18} />
+                </button>
+              </div>
+            </div>
+            {busy && result && (
+              <div className="rerun-progress" role="status">
+                <LoaderCircle size={16} />
+                <span>
+                  {stage} · {progress}%<small>Your current text is safe.</small>
+                </span>
+                <button onClick={cancelExtraction}>Cancel</button>
+              </div>
+            )}
+            {busy && !result ? (
               <div className="working-state" role="status">
                 <div className="reader-spinner">
                   <ScanText size={32} />
@@ -854,28 +1256,28 @@ export default function Home() {
                 </div>
                 <div className="progress-meta">
                   <span>{progress}% complete</span>
-                  <button
-                    onClick={() => {
-                      ++runId.current;
-                      cancelReader();
-                      setBusy(false);
-                      setStage("Extraction cancelled");
-                      setToast(
-                        "Extraction cancelled. Your image is still here.",
-                      );
-                    }}
-                  >
-                    Cancel
-                  </button>
+                  <button onClick={cancelExtraction}>Cancel</button>
                 </div>
               </div>
             ) : result ? (
               <div className="result-content">
                 <div className="result-status">
-                  <span className={`confidence ${confidence.toLowerCase()}`}>
-                    <CheckCheck size={14} />
-                    {confidence} confidence · {Math.round(result.confidence)}%
-                  </span>
+                  <button
+                    className="review-summary"
+                    onClick={() => startReview(undefined, "uncertain")}
+                    disabled={!remaining.length}
+                  >
+                    <Info size={16} />
+                    {remaining.length
+                      ? remaining.length +
+                        " " +
+                        (remaining.length === 1 ? "word" : "words") +
+                        " to check"
+                      : "No words flagged"}
+                    <span title="A recognition score, not a guarantee of correctness.">
+                      Reader score {Math.round(result.confidence)}%
+                    </span>
+                  </button>
                   <button
                     className="text-button"
                     onClick={() => setShowRaw(!showRaw)}
@@ -883,7 +1285,7 @@ export default function Home() {
                     {showRaw ? "Show cleaned" : "Show raw"}
                   </button>
                 </div>
-                {!shown ? (
+                {!shown && !result.text ? (
                   <div className="no-text">
                     <ScanText />
                     <h3>No text detected</h3>
@@ -899,8 +1301,23 @@ export default function Home() {
                   <EditableText
                     value={shown}
                     readOnly={showRaw}
-                    onChange={setText}
-                    uncertain={uncertain}
+                    onChange={editText}
+                    anchors={doc.anchors}
+                    highlightIds={[
+                      ...remaining,
+                      ...(reviewFilter === "numbers" ? reviewWords : []),
+                    ].map((w) => w.id)}
+                    activeId={activeId}
+                    onReview={(id) =>
+                      startReview(
+                        id,
+                        uncertain.some((w) => w.id === id)
+                          ? "uncertain"
+                          : "numbers",
+                      )
+                    }
+                    onUndo={undo}
+                    onRedo={redo}
                   />
                 )}
                 {result.confidence < 60 && shown && (
@@ -908,28 +1325,82 @@ export default function Home() {
                     This result may contain errors. Try a different preset.
                   </p>
                 )}
-                {uncertain.length > 0 && (
-                  <div className="uncertain">
-                    <button onClick={() => setReview(!review)}>
-                      <Info size={13} />
-                      {uncertain.length} uncertain{" "}
-                      {uncertain.length === 1 ? "word" : "words"} to review{" "}
-                      <ChevronDown size={13} />
+                <div className="review-tools">
+                  <span id="editor-hint">
+                    Click a highlighted word to check it against the image.
+                  </span>
+                  {numericWords.length > 0 && (
+                    <button onClick={() => startReview(undefined, "numbers")}>
+                      Check numbers{" "}
+                      <span>
+                        {
+                          numericWords.filter(
+                            (w) => !doc.reviewed.includes(w.id),
+                          ).length
+                        }
+                      </span>
                     </button>
-                    {review && (
-                      <div className="uncertain-words">
-                        {uncertain.map((w, i) => (
-                          <mark
-                            key={i}
-                            title={`${Math.round(w.confidence)}% confidence`}
-                          >
-                            {w.text}
-                            <small>{Math.round(w.confidence)}%</small>
-                          </mark>
-                        ))}
-                      </div>
-                    )}
+                  )}
+                </div>
+                {review && (
+                  <div className="review-list" aria-label="Words to review">
+                    <div className="review-list-heading">
+                      <span>
+                        {reviewFilter === "numbers"
+                          ? "Check numbers carefully"
+                          : "Words to check"}{" "}
+                        · {reviewWords.length} remaining
+                      </span>
+                      <button
+                        className="text-button"
+                        onClick={() => {
+                          setReview(false);
+                          setActiveId(null);
+                        }}
+                      >
+                        Hide review
+                      </button>
+                    </div>
+                    <div className="review-chips">
+                      {reviewWords.map((w) => (
+                        <button
+                          key={w.id}
+                          className={activeId === w.id ? "selected" : ""}
+                          onClick={() => startReview(w.id)}
+                          aria-label={
+                            "Review " + w.text + ", word " + (w.id + 1)
+                          }
+                        >
+                          {w.text}
+                        </button>
+                      ))}
+                      {!reviewWords.length && (
+                        <span className="review-complete">
+                          <Check size={16} />
+                          All flagged words checked. Names and numbers still
+                          deserve a look.
+                        </span>
+                      )}
+                    </div>
                   </div>
+                )}
+                {activeWord && (
+                  <WordReview
+                    word={activeWord}
+                    imageUrl={doc.imageUrl}
+                    currentValue={
+                      activeAnchor
+                        ? text.slice(activeAnchor.start, activeAnchor.end)
+                        : activeWord.text
+                    }
+                    canReplace={!!activeAnchor}
+                    index={activeIndex}
+                    total={reviewWords.length}
+                    onMove={moveReview}
+                    onReplace={(value) => finishWord(value)}
+                    onConfirm={() => finishWord()}
+                    onClose={() => setActiveId(null)}
+                  />
                 )}
               </div>
             ) : (
@@ -1002,198 +1473,203 @@ export default function Home() {
             <ChevronDown className="disclosure" size={17} />
           </button>
           {improve && (
-            <div className="settings-content">
-              <div className="settings-label">START WITH A PRESET</div>
-              <div className="presets">
-                {Object.entries(presets).map(([key, p]) => {
-                  const Icon = presetIcons[key as keyof typeof presetIcons];
-                  return (
-                    <button
-                      disabled={busy}
-                      key={key}
-                      className={settings.preset === key ? "selected" : ""}
-                      onClick={() =>
-                        setSettings((s) =>
-                          applyPreset(s, key as Exclude<Preset, "custom">),
-                        )
-                      }
-                    >
-                      <Icon size={17} />
-                      {p.label}
-                      {settings.preset === key && <Check size={13} />}
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="settings-grid">
-                <label>
-                  Text layout
-                  <select
-                    aria-label="Text layout"
-                    disabled={busy}
-                    value={settings.psm}
-                    onChange={(e) =>
-                      change("psm", Number(e.target.value) as Settings["psm"])
-                    }
-                  >
-                    <option value={3}>Auto (document)</option>
-                    <option value={4}>Single column</option>
-                    <option value={6}>Single block</option>
-                    <option value={7}>Single line</option>
-                    <option value={8}>Single word</option>
-                    <option value={11}>Scattered text</option>
-                  </select>
-                </label>
-                <label>
-                  Reader
-                  <select
-                    aria-label="Reader"
-                    disabled={busy}
-                    value={settings.oem}
-                    onChange={(e) =>
-                      change("oem", Number(e.target.value) as 0 | 1)
-                    }
-                  >
-                    <option value={1}>Standard · recommended</option>
-                    <option value={0} disabled={settings.lang !== "eng"}>
-                      Classic · English only
-                    </option>
-                  </select>
-                </label>
-                <label>
-                  Accuracy
-                  <select
-                    aria-label="Accuracy"
-                    disabled={busy || settings.oem === 0}
-                    value={settings.model}
-                    onChange={(e) =>
-                      change("model", e.target.value as Settings["model"])
-                    }
-                  >
-                    <option value="fast">Fast · smaller download</option>
-                    <option value="best">Best · larger download</option>
-                  </select>
-                </label>
-              </div>
-              <div className="settings-toggles">
-                <Toggle
-                  checked={settings.numbersOnly}
-                  disabled={busy}
-                  onChange={(v) => change("numbersOnly", v)}
-                  label="Numbers only"
-                  description="For amounts, dates, and figures"
-                />
-                <Toggle
-                  checked={settings.useOriginal}
-                  disabled={busy}
-                  onChange={(v) => change("useOriginal", v)}
-                  label="Use original image"
-                  description="Skip image cleanup"
-                />
-              </div>
-              <button
-                className="advanced-toggle"
-                onClick={() => setAdvanced(!advanced)}
-              >
-                <ChevronRight
-                  size={14}
-                  className={advanced ? "expanded" : ""}
-                />
-                Advanced image & text cleanup
-              </button>
-              {advanced && (
-                <div className="advanced">
-                  <div>
-                    <h4>Image cleanup</h4>
-                    {(
-                      [
-                        ["grayscale", "Grayscale"],
-                        ["invertIfDark", "Invert dark backgrounds"],
-                        ["upscale", "Enlarge small text"],
-                        ["denoise", "Reduce image noise"],
-                        ["deskew", "Straighten text"],
-                        ["removeBorders", "Remove scan borders"],
-                        ["removeLines", "Remove table lines"],
-                      ] as const
-                    ).map(([key, label]) => (
-                      <Toggle
+            <SettingsSheet onClose={closeSettings}>
+              <div className="settings-content">
+                <div className="settings-label">START WITH A PRESET</div>
+                <div className="presets">
+                  {Object.entries(presets).map(([key, p]) => {
+                    const Icon = presetIcons[key as keyof typeof presetIcons];
+                    return (
+                      <button
+                        disabled={busy}
                         key={key}
-                        label={label}
-                        checked={settings.steps[key]}
-                        disabled={busy || settings.useOriginal}
-                        onChange={(v) => setStep(key, v)}
-                      />
-                    ))}
-                    <label className="threshold-label">
-                      Threshold
-                      <select
-                        aria-label="Threshold"
-                        disabled={busy || settings.useOriginal}
-                        value={settings.steps.threshold}
-                        onChange={(e) =>
-                          setStep(
-                            "threshold",
-                            e.target.value as Steps["threshold"],
+                        className={settings.preset === key ? "selected" : ""}
+                        onClick={() =>
+                          setSettings((s) =>
+                            applyPreset(s, key as Exclude<Preset, "custom">),
                           )
                         }
                       >
-                        <option value="none">None</option>
-                        <option value="otsu">Even lighting (Otsu)</option>
-                        <option value="adaptive">
-                          Uneven lighting (adaptive)
-                        </option>
-                      </select>
-                    </label>
-                  </div>
-                  <div>
-                    <h4>Text cleanup</h4>
-                    <p className="setting-description">
-                      Changing these rules reapplies cleanup to the raw text,
-                      replacing manual edits.
-                    </p>
-                    {(
-                      [
-                        ["joinHyphens", "Join hyphenated words"],
-                        ["mergeLines", "Merge paragraph lines"],
-                        ["stripNoise", "Remove stray symbols"],
-                        ["preserveSpaces", "Preserve column spacing"],
-                        ["normalizeQuotes", "Straighten quotes"],
-                        ["numberFixes", "Fix number-like characters"],
-                      ] as const
-                    ).map(([key, label]) => (
-                      <Toggle
-                        key={key}
-                        label={label}
-                        disabled={busy}
-                        checked={settings.cleanup[key]}
-                        onChange={(v) => changeCleanup(key, v)}
-                      />
-                    ))}
-                    <p className="setting-description">
-                      No spelling corrections. No rewritten words. You’re in
-                      control.
-                    </p>
-                  </div>
+                        <Icon size={17} />
+                        {p.label}
+                        {settings.preset === key && <Check size={13} />}
+                      </button>
+                    );
+                  })}
                 </div>
-              )}
-              <div className="settings-footer">
-                <span>
-                  <Info size={14} />
-                  Settings apply the next time you read an image.
-                </span>
+                <div className="settings-grid">
+                  <label>
+                    Text layout
+                    <select
+                      aria-label="Text layout"
+                      disabled={busy}
+                      value={settings.psm}
+                      onChange={(e) =>
+                        change("psm", Number(e.target.value) as Settings["psm"])
+                      }
+                    >
+                      <option value={3}>Auto (document)</option>
+                      <option value={4}>Single column</option>
+                      <option value={6}>Single block</option>
+                      <option value={7}>Single line</option>
+                      <option value={8}>Single word</option>
+                      <option value={11}>Scattered text</option>
+                    </select>
+                  </label>
+                  <label>
+                    Reader
+                    <select
+                      aria-label="Reader"
+                      disabled={busy}
+                      value={settings.oem}
+                      onChange={(e) =>
+                        change("oem", Number(e.target.value) as 0 | 1)
+                      }
+                    >
+                      <option value={1}>Standard · recommended</option>
+                      <option value={0} disabled={settings.lang !== "eng"}>
+                        Classic · English only
+                      </option>
+                    </select>
+                  </label>
+                  <label>
+                    Accuracy
+                    <select
+                      aria-label="Accuracy"
+                      disabled={busy || settings.oem === 0}
+                      value={settings.model}
+                      onChange={(e) =>
+                        change("model", e.target.value as Settings["model"])
+                      }
+                    >
+                      <option value="fast">Fast · smaller download</option>
+                      <option value="best">Best · larger download</option>
+                    </select>
+                  </label>
+                </div>
+                <div className="settings-toggles">
+                  <Toggle
+                    checked={settings.numbersOnly}
+                    disabled={busy}
+                    onChange={(v) => changeOutput(v ? "numbers" : "preserve")}
+                    label="Numbers only"
+                    description="For amounts, dates, and figures"
+                  />
+                  <Toggle
+                    checked={settings.useOriginal}
+                    disabled={busy}
+                    onChange={(v) => change("useOriginal", v)}
+                    label="Use original image"
+                    description="Skip image cleanup"
+                  />
+                </div>
                 <button
-                  className="primary"
-                  disabled={!source || busy}
-                  onClick={() => source && extract(source, name, settings)}
+                  className="advanced-toggle"
+                  onClick={() => setAdvanced(!advanced)}
                 >
-                  <RefreshCw size={15} />
-                  Run again
+                  <ChevronRight
+                    size={14}
+                    className={advanced ? "expanded" : ""}
+                  />
+                  Advanced image & text cleanup
                 </button>
+                {advanced && (
+                  <div className="advanced">
+                    <div>
+                      <h4>Image cleanup</h4>
+                      {(
+                        [
+                          ["grayscale", "Grayscale"],
+                          ["invertIfDark", "Invert dark backgrounds"],
+                          ["upscale", "Enlarge small text"],
+                          ["denoise", "Reduce image noise"],
+                          ["deskew", "Straighten text"],
+                          ["removeBorders", "Remove scan borders"],
+                          ["removeLines", "Remove table lines"],
+                        ] as const
+                      ).map(([key, label]) => (
+                        <Toggle
+                          key={key}
+                          label={label}
+                          checked={settings.steps[key]}
+                          disabled={busy || settings.useOriginal}
+                          onChange={(v) => setStep(key, v)}
+                        />
+                      ))}
+                      <label className="threshold-label">
+                        Threshold
+                        <select
+                          aria-label="Threshold"
+                          disabled={busy || settings.useOriginal}
+                          value={settings.steps.threshold}
+                          onChange={(e) =>
+                            setStep(
+                              "threshold",
+                              e.target.value as Steps["threshold"],
+                            )
+                          }
+                        >
+                          <option value="none">None</option>
+                          <option value="otsu">Even lighting (Otsu)</option>
+                          <option value="adaptive">
+                            Uneven lighting (adaptive)
+                          </option>
+                        </select>
+                      </label>
+                    </div>
+                    <div>
+                      <h4>Text cleanup</h4>
+                      <p className="setting-description">
+                        Preview these changes beside your current text before
+                        applying them. Your edits stay safe.
+                      </p>
+                      {(
+                        [
+                          ["joinHyphens", "Join hyphenated words"],
+                          ["mergeLines", "Merge paragraph lines"],
+                          ["stripNoise", "Remove stray symbols"],
+                          ["preserveSpaces", "Preserve column spacing"],
+                          ["normalizeQuotes", "Straighten quotes"],
+                          ["numberFixes", "Fix number-like characters"],
+                        ] as const
+                      ).map(([key, label]) => (
+                        <Toggle
+                          key={key}
+                          label={label}
+                          disabled={busy}
+                          checked={settings.cleanup[key]}
+                          onChange={(v) => changeCleanup(key, v)}
+                        />
+                      ))}
+                      <p className="setting-description">
+                        No spelling corrections. No rewritten words. You’re in
+                        control.
+                      </p>
+                    </div>
+                  </div>
+                )}
+                <div className="settings-footer">
+                  <span>
+                    <Info size={14} />
+                    Settings apply the next time you read an image.
+                  </span>
+                  <button
+                    className="primary"
+                    disabled={!source || busy}
+                    onClick={() => {
+                      setImprove(false);
+                      if (source) void extract(source, name, settings);
+                    }}
+                  >
+                    <RefreshCw size={15} />
+                    Read with these settings
+                  </button>
+                </div>
               </div>
-            </div>
+            </SettingsSheet>
           )}
         </section>
-        {!source && (
+        {!source && !result && (
           <section className="samples">
             <div className="sample-label">
               <span>Just looking around?</span>
@@ -1335,6 +1811,73 @@ export default function Home() {
           <p>Your image stays on your device.</p>
         </div>
       )}
+      {(source || result) && (
+        <div className="mobile-actions">
+          <button onClick={() => input.current?.click()} disabled={busy}>
+            <Plus size={19} />
+            New image
+          </button>
+          <button onClick={() => setImprove(true)}>
+            <SlidersHorizontal size={19} />
+            Settings
+          </button>
+          <button className="primary" disabled={!shown} onClick={copy}>
+            <Copy size={18} />
+            Copy text
+          </button>
+        </div>
+      )}
+      {modal === "compare" && candidate && (
+        <Modal
+          title="Keep the version that works for you"
+          wide
+          onClose={dismissCandidate}
+        >
+          <p className="comparison-intro">
+            Your current text and corrections are unchanged. Compare both
+            versions, then choose. Applying the new result is undoable.
+          </p>
+          <div className="result-comparison">
+            <label>
+              <span>
+                Your current text <small>{doc.name}</small>
+              </span>
+              <textarea
+                aria-label="Current text"
+                readOnly
+                value={text}
+                dir="auto"
+              />
+            </label>
+            <label>
+              <span>
+                New result <small>{candidate.name}</small>
+              </span>
+              <textarea
+                aria-label="New result"
+                readOnly
+                value={candidate.text}
+                dir="auto"
+              />
+            </label>
+          </div>
+          <div className="comparison-stats">
+            <span>
+              {text.length} → {candidate.text.length} characters
+            </span>
+            <span>Check changes to names, numbers, and line breaks.</span>
+          </div>
+          <div className="modal-actions">
+            <button className="secondary" onClick={dismissCandidate}>
+              Keep my text
+            </button>
+            <button className="primary" onClick={acceptCandidate}>
+              <Check size={17} />
+              Use new result
+            </button>
+          </div>
+        </Modal>
+      )}
       {modal === "help" && (
         <Modal
           title="A few pixels. A lot of possibilities."
@@ -1454,20 +1997,25 @@ export default function Home() {
                   <button
                     key={i}
                     onClick={() => {
-                      setText(item.text);
-                      setSource(null);
-                      setSourceUrl("");
-                      setCleanUrl("");
-                      cache.current = null;
-                      setElapsed(item.elapsed ?? 0);
-                      setResult({
+                      const restored: EditorDocument = {
+                        ...emptyDocument,
                         text: item.text,
-                        confidence: item.confidence ?? 0,
-                        words: [],
-                      });
-                      setName(item.name);
+                        result: {
+                          text: item.text,
+                          confidence: item.confidence ?? 0,
+                          words: [],
+                        },
+                        name: item.name,
+                        elapsed: item.elapsed ?? 0,
+                      };
+                      if (result) {
+                        setCandidate(restored);
+                        setModal("compare");
+                      } else {
+                        dispatch({ type: "reset", document: restored });
+                        setModal(null);
+                      }
                       setShowRaw(false);
-                      setModal(null);
                       setStage("Saved text restored");
                       setToast(
                         "Saved text restored. The original image was not stored.",

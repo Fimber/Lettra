@@ -6,8 +6,22 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 const errors = [],
   checks = [];
 page.on("pageerror", (e) => errors.push(e.message));
-page.on('console',m=>{if(m.type()==='error'||m.type()==='warning')console.error('BROWSER',m.text());});
-await page.addInitScript(()=>{const OriginalWorker=window.Worker;window.Worker=class extends OriginalWorker{constructor(...args){super(...args);this.addEventListener('message',({data})=>{if(data.status==='reject')console.warn('Worker error:',data.action,data.data);});}};});
+page.on("console", (m) => {
+  if (m.type() === "error" || m.type() === "warning")
+    console.error("BROWSER", m.text());
+});
+await page.addInitScript(() => {
+  const OriginalWorker = window.Worker;
+  window.Worker = class extends OriginalWorker {
+    constructor(...args) {
+      super(...args);
+      this.addEventListener("message", ({ data }) => {
+        if (data.status === "reject")
+          console.warn("Worker error:", data.action, data.data);
+      });
+    }
+  };
+});
 const check = (x) => {
   checks.push(x);
   console.log("PASS", x);
@@ -15,7 +29,7 @@ const check = (x) => {
 const result = async () => {
   await page.waitForFunction(
     () =>
-      !document.querySelector(".working-state") &&
+      !document.querySelector(".working-state,.rerun-progress") &&
       (document.querySelector("textarea") ||
         document.querySelector(".no-text") ||
         document.querySelector(".error-banner")),
@@ -24,6 +38,12 @@ const result = async () => {
   );
   if (await page.locator(".error-banner").count())
     throw new Error(await page.locator(".error-banner").innerText());
+  if (await page.locator(".result-comparison").count())
+    await page
+      .getByRole("button", { name: "Use new result", exact: true })
+      .click();
+  if (!(await page.locator(".settings-sheet").count()))
+    await page.locator(".settings-shortcut").click();
 };
 const run = async () => {
   await page.getByRole("button", { name: "Run again", exact: true }).click();
@@ -36,7 +56,6 @@ try {
   await page.getByRole("button", { name: "Close dialog" }).click();
   await page.getByRole("button", { name: "A receipt", exact: false }).click();
   await result();
-  await page.getByRole("button", { name: /Improve your result/ }).click();
   await page.getByRole("button", { name: "Receipt", exact: true }).click();
   await run();
   await expect(page.locator("textarea")).toHaveValue(/THE CORNER STORE/);
@@ -45,11 +64,12 @@ try {
     await page.locator("textarea").inputValue(),
   );
   check("Receipt adaptive threshold and line removal");
-  await page.getByRole("checkbox", { name: /^Numbers only/ }).check();
-  await run();
+  await page.getByRole("checkbox", { name: /^Numbers only/ }).click();
+  await result();
   assert.doesNotMatch(await page.locator("textarea").inputValue(), /[a-z]/i);
   check("Numbers-only recognition");
-  await page.getByRole("checkbox", { name: /^Numbers only/ }).uncheck();
+  await page.getByRole("checkbox", { name: /^Numbers only/ }).click();
+  await result();
   await page.getByRole("button", { name: "Document", exact: true }).click();
   await run();
   check("Document preset with adaptive threshold and denoise");
@@ -103,13 +123,11 @@ try {
     ctx.fillRect(0, 0, 800, 400);
     return c.toDataURL("image/png").split(",")[1];
   });
-  await page
-    .getByLabel("Choose an image", { exact: true })
-    .setInputFiles({
-      name: "blank.png",
-      mimeType: "image/png",
-      buffer: Buffer.from(png, "base64"),
-    });
+  await page.getByLabel("Choose an image", { exact: true }).setInputFiles({
+    name: "blank.png",
+    mimeType: "image/png",
+    buffer: Buffer.from(png, "base64"),
+  });
   await result();
   await expect(
     page.getByRole("heading", { name: "No text detected" }),
@@ -128,13 +146,11 @@ try {
     ctx.fillText("Bonjour, voici un texte en français.", 40, 180);
     return c.toDataURL("image/png").split(",")[1];
   });
-  await page
-    .getByLabel("Choose an image", { exact: true })
-    .setInputFiles({
-      name: "french.png",
-      mimeType: "image/png",
-      buffer: Buffer.from(french, "base64"),
-    });
+  await page.getByLabel("Choose an image", { exact: true }).setInputFiles({
+    name: "french.png",
+    mimeType: "image/png",
+    buffer: Buffer.from(french, "base64"),
+  });
   await result();
   assert.match(await page.locator("textarea").inputValue(), /Bonjour/);
   check("French language model");

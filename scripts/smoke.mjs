@@ -30,8 +30,9 @@ const check = (label) => {
 const waitResult = async () => {
   await page.waitForFunction(
     () =>
-      document.querySelector("textarea") ||
-      document.querySelector(".error-banner"),
+      !document.querySelector(".working-state,.rerun-progress") &&
+      (document.querySelector("textarea") ||
+        document.querySelector(".error-banner")),
     {},
     { timeout: 120000 },
   );
@@ -39,6 +40,10 @@ const waitResult = async () => {
     ? await page.locator(".error-banner").textContent()
     : null;
   if (error) throw new Error(error);
+  if (await page.locator(".result-comparison").count())
+    await page
+      .getByRole("button", { name: "Use new result", exact: true })
+      .click();
   await page
     .getByRole("textbox", { name: "Editable extracted text" })
     .waitFor();
@@ -95,23 +100,19 @@ try {
   await page.getByRole("button", { name: "Show cleaned", exact: true }).click();
   check("Raw text remains available");
   await page.getByRole("button", { name: "Clear image and result" }).click();
-  await page
-    .getByLabel("Choose an image", { exact: true })
-    .setInputFiles({
-      name: "fake.png",
-      mimeType: "image/png",
-      buffer: Buffer.from('<svg onload="alert(1)"/>'),
-    });
+  await page.getByLabel("Choose an image", { exact: true }).setInputFiles({
+    name: "fake.png",
+    mimeType: "image/png",
+    buffer: Buffer.from('<svg onload="alert(1)"/>'),
+  });
   await expect(page.locator(".error-banner")).toContainText("isn't supported");
   check("Magic-byte file validation");
   await page.getByRole("button", { name: "Dismiss error" }).click();
-  await page
-    .getByLabel("Choose an image", { exact: true })
-    .setInputFiles({
-      name: "large.png",
-      mimeType: "image/png",
-      buffer: Buffer.alloc(16 * 1024 * 1024),
-    });
+  await page.getByLabel("Choose an image", { exact: true }).setInputFiles({
+    name: "large.png",
+    mimeType: "image/png",
+    buffer: Buffer.alloc(16 * 1024 * 1024),
+  });
   await expect(page.locator(".error-banner")).toContainText("under 15 MB");
   check("15 MB size limit");
   await page.getByRole("button", { name: "Dismiss error" }).click();
@@ -119,13 +120,11 @@ try {
   huge.set([137, 80, 78, 71, 13, 10, 26, 10]);
   huge.writeUInt32BE(10000, 16);
   huge.writeUInt32BE(5000, 20);
-  await page
-    .getByLabel("Choose an image", { exact: true })
-    .setInputFiles({
-      name: "oversized.png",
-      mimeType: "image/png",
-      buffer: huge,
-    });
+  await page.getByLabel("Choose an image", { exact: true }).setInputFiles({
+    name: "oversized.png",
+    mimeType: "image/png",
+    buffer: huge,
+  });
   await expect(page.locator(".error-banner")).toContainText("40 megapixels");
   check("Pixel limit checked before decoding");
   await page.getByRole("button", { name: "Dismiss error" }).click();
