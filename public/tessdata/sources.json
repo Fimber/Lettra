@@ -1,0 +1,97 @@
+[
+  {
+    "file": "public/tessdata/fast/eng.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/4.1.0/eng.traineddata",
+    "gzipSha256": "22d975baf864a9d30757dccd47020e08c433ba4b2324d1edbfc645df996a15be"
+  },
+  {
+    "file": "public/tessdata/fast/fra.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/4.1.0/fra.traineddata",
+    "gzipSha256": "7ffcc7f3f5e213a8b0ce4f8c9c071b02fb208968e309a9e2148a2c123f73f40d"
+  },
+  {
+    "file": "public/tessdata/fast/spa.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/4.1.0/spa.traineddata",
+    "gzipSha256": "bd43c7cbe66a5afbbb4bfbc2fbf935c2f0ae4e959e730c5451ea4714e134b22f"
+  },
+  {
+    "file": "public/tessdata/fast/por.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/4.1.0/por.traineddata",
+    "gzipSha256": "e12ae528b1d8f9dee42b6d3960a40a49d30d1531986b2d7fef1e30265d284c99"
+  },
+  {
+    "file": "public/tessdata/fast/deu.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/4.1.0/deu.traineddata",
+    "gzipSha256": "f5bb2017edf9026b96f6eaf19520051bdd7527041b5cde7744c82c43b31dd13e"
+  },
+  {
+    "file": "public/tessdata/fast/ara.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/4.1.0/ara.traineddata",
+    "gzipSha256": "2a9d48a9ce1aad845139dcf6d4b86ba44d0d024cc2658bb8f485a09148c173b7"
+  },
+  {
+    "file": "public/tessdata/fast/chi_sim.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/4.1.0/chi_sim.traineddata",
+    "gzipSha256": "4e4c7a1b5e40754b8a3198ecce8dcf6800926b481380795710ecab5675f89fef"
+  },
+  {
+    "file": "public/tessdata/fast/hin.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/4.1.0/hin.traineddata",
+    "gzipSha256": "abdc590d1964261361b999fbe75c196eaae423115de20514b495aca026924746"
+  },
+  {
+    "file": "public/tessdata/fast/yor.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/4.1.0/yor.traineddata",
+    "gzipSha256": "b62bc096430a70190921b4ed2ffcf49ed4c8bc9527dce1ce4b2f19419a84fd72"
+  },
+  {
+    "file": "public/tessdata/best/eng.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/4.1.0/eng.traineddata",
+    "gzipSha256": "940647c38624231b19fd97aa8646ae6204a6ffe97d6a53f2092cf42efee26ff7"
+  },
+  {
+    "file": "public/tessdata/best/fra.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/4.1.0/fra.traineddata",
+    "gzipSha256": "c535effa27ea16e9ecd5813f02c8cf6f9feb4ddef9fd0d83aecd158c2bb377ef"
+  },
+  {
+    "file": "public/tessdata/best/spa.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/4.1.0/spa.traineddata",
+    "gzipSha256": "5746b2125e4c84c7f0bc10f4413750e03c85fa590408a987059f77a3d8e7b9c7"
+  },
+  {
+    "file": "public/tessdata/best/por.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/4.1.0/por.traineddata",
+    "gzipSha256": "9fb647fc43f5d0092733fc4130c4fa6f170539ceaaf9c3e75f40954b54112856"
+  },
+  {
+    "file": "public/tessdata/best/deu.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/4.1.0/deu.traineddata",
+    "gzipSha256": "0680b1eae3c8a05678e8fcecfd727b2ee50982caaab0c6c83619b046ae26c71f"
+  },
+  {
+    "file": "public/tessdata/best/ara.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/4.1.0/ara.traineddata",
+    "gzipSha256": "3bda8f779fb3b5e9de879289afb1406feede65424ee3feb91ebdc172c996b6e3"
+  },
+  {
+    "file": "public/tessdata/best/chi_sim.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/4.1.0/chi_sim.traineddata",
+    "gzipSha256": "583ecde12193d99bf4ba81bc9c1666b87ec90b10be28a35c18d4d73fe73f2b2e"
+  },
+  {
+    "file": "public/tessdata/best/hin.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/4.1.0/hin.traineddata",
+    "gzipSha256": "ceb01cf98677e8a593db19c454a5c6ffa598c9e0b44e15f4bdb17dd23a614fda"
+  },
+  {
+    "file": "public/tessdata/best/yor.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata_best/4.1.0/yor.traineddata",
+    "gzipSha256": "bcb7b094cdfd0f308328322d64c3e2c7be13e95f782c0d0c2ea57cd69165f829"
+  },
+  {
+    "file": "public/tessdata/classic/eng.traineddata.gz",
+    "source": "https://raw.githubusercontent.com/tesseract-ocr/tessdata/4.1.0/eng.traineddata",
+    "gzipSha256": "5d22d6ca7e269b0d80f669c3bad611ee3dfa6b9407896146e441966d40f5872a"
+  }
+]
