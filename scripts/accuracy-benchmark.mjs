@@ -59,6 +59,9 @@ const metadata = {
   platform: process.platform,
   origin,
   servedBuild: {
+    photoAnalysisSha256: createHash("sha256")
+      .update(Buffer.from(await (await fetch(`${origin}/photo-analysis.js`)).arrayBuffer()))
+      .digest("hex"),
     indexSha256: createHash("sha256")
       .update(Buffer.from(await (await fetch(origin)).arrayBuffer()))
       .digest("hex"),

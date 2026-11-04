@@ -1,0 +1,42 @@
+import { chromium, expect } from "@playwright/test";
+import { resolve } from "node:path";
+import { readFile, mkdir, writeFile } from "node:fs/promises";
+import assert from "node:assert/strict";
+const item = JSON.parse(await readFile("benchmarks/corpus.json","utf8")).cases.find(x=>x.id==="phone-photo-02");
+const origin=process.env.LETTRA_URL||"http://127.0.0.1:3000",checks=[],errors=[];
+const browser=await chromium.launch({channel:"chrome",headless:true});
+try {
+ const context=await browser.newContext({serviceWorkers:"block"}),page=await context.newPage();
+ page.on("pageerror",e=>errors.push(e.message));
+ let release,requested;
+ const held=new Promise(r=>release=r),seen=new Promise(r=>requested=r);
+ await context.route("**/tessdata/classic/eng.traineddata.gz",async route=>{requested();await held;await route.continue().catch(()=>{});});
+ await page.goto(origin);
+ await page.getByLabel("Choose an image",{exact:true}).setInputFiles(resolve(item.image));
+ await Promise.race([seen,new Promise((_,reject)=>setTimeout(()=>reject(Error("Orientation worker never requested its data")),45000))]);
+ await page.getByRole("button",{name:"Cancel",exact:true}).click({force:true});
+ await expect(page.locator(".working-state,.rerun-progress")).toHaveCount(0);
+ release();checks.push("Cancel while orientation worker initializes");
+ await context.unroute("**/tessdata/classic/eng.traineddata.gz");
+ await page.getByRole("button",{name:"Clear image and result",exact:true}).click();
+ await page.getByRole("button",{name:"A printed page",exact:false}).click();
+ await page.waitForFunction(()=>!document.querySelector(".working-state,.rerun-progress")&&document.querySelector(".text-editor,.error-banner"),{},{timeout:120000});
+ await expect(page.getByRole("textbox",{name:"Editable extracted text",exact:true})).toHaveValue(/Good ideas rarely arrive fully formed/);
+ checks.push("Recovery after photo cancellation");
+ await context.close();
+ const fallback=await browser.newContext({serviceWorkers:"block"}),p=await fallback.newPage();
+ p.on("pageerror",e=>errors.push(e.message));
+ await fallback.route("**/tessdata/classic/eng.traineddata.gz",route=>route.abort());
+ await p.goto(origin);
+ await p.getByLabel("Choose an image",{exact:true}).setInputFiles(resolve(item.image));
+ await p.waitForFunction(()=>document.querySelector(".working-state"));
+ await p.waitForFunction(()=>!document.querySelector(".working-state,.rerun-progress")&&document.querySelector(".text-editor,.error-banner"),{},{timeout:180000});
+ assert.equal(await p.locator(".error-banner").count(),0);
+ assert.ok((await p.getByRole("textbox",{name:"Editable extracted text",exact:true}).inputValue()).length>1000);
+ checks.push("Unavailable optional orientation asset retains full-page OCR");
+ await fallback.close();assert.equal(errors.length,0);
+} finally {
+ await browser.close();await mkdir("test-results/photo-smoke",{recursive:true});
+ await writeFile("test-results/photo-smoke/cancel.json",JSON.stringify({checks,errors,physicalPhone:false},null,2));
+ console.log(JSON.stringify({checks,errors}));
+}

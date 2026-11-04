@@ -1,0 +1,132 @@
+{
+  "unitTests": {
+    "passed": 43,
+    "files": 6,
+    "command": "npm test"
+  },
+  "build": {
+    "status": "passed",
+    "command": "npm run build"
+  },
+  "workspace": {
+    "checks": [
+      "Compact workspace and keyboard/pointer resizing",
+      "Image zoom, drag-to-pan and fit",
+      "Button and keyboard undo/redo",
+      "Reruns preserve edits and rejected results leave them intact",
+      "Accepted reruns are undoable",
+      "Output cleanup previews changes and undo restores formatting",
+      "Declining numbers-only restores the original recognition mode",
+      "Word review shows source crop and bounding box, navigates and undoes corrections",
+      "Separate numeric review includes high-confidence amounts",
+      "Undo restores the matching image and text after rotation",
+      "Mobile settings sheet traps focus, closes with Escape, and sticky copy works without overflow",
+      "Cancel during image encoding preserves edits and the reader can rerun afterwards",
+      "No browser runtime errors"
+    ],
+    "errors": []
+  },
+  "photo": [
+    {
+      "engine": "chromium",
+      "physicalPhone": false,
+      "checks": [
+        "Oblique photo orientation and local OCR",
+        "Corrected image and word review overlay",
+        "Editing and undo after photo correction",
+        "No mobile-width overflow",
+        "Offline photo reread and comparison preserve text"
+      ],
+      "errors": [],
+      "external": [],
+      "metrics": {
+        "charErrors": 3782,
+        "characters": 5685,
+        "cer": 0.665259454705365,
+        "wordErrors": 679,
+        "words": 835,
+        "wer": 0.8131736526946107,
+        "numberErrors": 67,
+        "numbers": 80,
+        "numberErrorRate": 0.8375,
+        "numbersExact": false,
+        "casefoldCER": 0.6527704485488126
+      },
+      "image": {
+        "width": 3767,
+        "height": 3712
+      },
+      "status": "passed"
+    },
+    {
+      "engine": "firefox",
+      "physicalPhone": false,
+      "checks": [
+        "Oblique photo orientation and local OCR",
+        "Corrected image and word review overlay",
+        "Editing and undo after photo correction",
+        "No mobile-width overflow"
+      ],
+      "errors": [],
+      "external": [],
+      "metrics": {
+        "charErrors": 3203,
+        "characters": 5685,
+        "cer": 0.5634124890061566,
+        "wordErrors": 707,
+        "words": 835,
+        "wer": 0.8467065868263473,
+        "numberErrors": 69,
+        "numbers": 80,
+        "numberErrorRate": 0.8625,
+        "numbersExact": false,
+        "casefoldCER": 0.5484608619173263
+      },
+      "image": {
+        "width": 3767,
+        "height": 3712
+      },
+      "status": "passed"
+    },
+    {
+      "engine": "webkit",
+      "physicalPhone": false,
+      "checks": [
+        "Oblique photo orientation and local OCR",
+        "Corrected image and word review overlay",
+        "Editing and undo after photo correction",
+        "No mobile-width overflow"
+      ],
+      "errors": [],
+      "external": [],
+      "metrics": {
+        "charErrors": 4572,
+        "characters": 5685,
+        "cer": 0.804221635883905,
+        "wordErrors": 832,
+        "words": 835,
+        "wer": 0.9964071856287425,
+        "numberErrors": 73,
+        "numbers": 80,
+        "numberErrorRate": 0.9125,
+        "numbersExact": false,
+        "casefoldCER": 0.772207563764292
+      },
+      "image": {
+        "width": 3767,
+        "height": 3712
+      },
+      "status": "passed"
+    }
+  ],
+  "cancellation": {
+    "checks": [
+      "Cancel while orientation worker initializes",
+      "Recovery after photo cancellation",
+      "Unavailable optional orientation asset retains full-page OCR"
+    ],
+    "errors": [],
+    "physicalPhone": false
+  },
+  "physicalPhone": false
+}

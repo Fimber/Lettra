@@ -14,3 +14,13 @@ export function needsRowLayout(words: Word[], height: number): boolean {
     (word, i) => i > 0 && words[i - 1].bbox.y0 - word.bbox.y0 > height * 0.15,
   );
 }
+
+// Compare local OCR evidence without a dictionary or reference transcript.
+// Weight confident alphanumeric characters; a short, confident fragment must
+// not replace a more complete page, and punctuation noise earns no credit.
+export function readingEvidence(words: { text: string; confidence: number }[]) {
+  return words.reduce((sum, word) => {
+    const letters = word.text.match(/[\p{L}\p{N}]/gu)?.length ?? 0;
+    return sum + letters * (Math.max(0, word.confidence - 30) / 70) ** 2;
+  }, 0);
+}

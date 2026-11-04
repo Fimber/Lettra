@@ -3,6 +3,7 @@ let cvReady;
 function loadCV() {
   return (cvReady ||= (async () => {
     importScripts("/vendor/opencv.js");
+    importScripts("/photo-analysis.js");
     const module = await self.cv;
     if (module.Mat) return module;
     return new Promise((resolve, reject) => {
@@ -22,6 +23,10 @@ self.onmessage = async ({ data }) => {
   const hold = (x) => (mats.push(x), x);
   try {
     const cv = await loadCV();
+    if (data.action === "regions") {
+      self.postMessage({ regions: self.lettraPhoto.textRegions(cv, data.pixels) });
+      return;
+    }
     // Transfer pixel buffers rather than requiring OffscreenCanvas in workers.
     // This also supports WebKit implementations without worker canvas APIs.
     let img = hold(cv.matFromImageData(data.pixels));
@@ -36,6 +41,7 @@ self.onmessage = async ({ data }) => {
     }
     const peaks = Array.from(histogram).sort((a, b) => b - a);
     const screenLike = (peaks[0] + peaks[1] + peaks[2]) / sampled > 0.82;
+    let photo = false;
     if (data.preset === "auto") {
       const colors = new Set();
       let min = 255,
@@ -64,7 +70,21 @@ self.onmessage = async ({ data }) => {
             max = Math.max(max, sum / count);
           }
         }
-      const photo = colors.size > 45 && max - min > 35;
+      photo = !screenLike && colors.size > 45 && max - min > 35;
+      if (photo && steps.deskew && data.enhancePhotos) {
+        // Estimate the printed line direction using glyph-sized components.
+        // Desk edges and page borders must not determine the text rotation.
+        const mask = self.lettraPhoto.glyphMask(cv, data.pixels);
+        const direction = self.lettraPhoto.projectionAngle(mask);
+        if (direction.accepted && Math.abs(direction.angle) > 0.5) {
+          const rotated = self.lettraPhoto.expandedRotate(cv, data.pixels, direction.angle);
+          img = hold(cv.matFromImageData(rotated));
+          cv.cvtColor(img, gray, cv.COLOR_RGBA2GRAY);
+        }
+        // The projection correction already handles arbitrary angles. Never
+        // rotate again using the outline of all dark foreground pixels.
+        steps.deskew = false;
+      }
       // Preserve antialiased light screens; dark screens retain binarization.
       // Camera photos keep adaptive cleanup: removing it severely regressed
       // multicolumn page segmentation in the frozen photograph benchmark.
@@ -275,7 +295,7 @@ self.onmessage = async ({ data }) => {
         pixels,
         width: rgba.cols,
         height: rgba.rows,
-        analysis: { screenLike },
+        analysis: { screenLike, photo },
       },
       [pixels.buffer],
     );

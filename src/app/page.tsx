@@ -343,6 +343,8 @@ export default function Home() {
           steps: s.steps,
           preset: s.preset,
           useOriginal: s.useOriginal,
+          lang: s.lang,
+          psm: s.psm,
         });
         let cleaned: HTMLCanvasElement;
         const warming = prepareReader(s, (status, p) => {
@@ -362,19 +364,22 @@ export default function Home() {
           cache.current = { source: canvas, key, canvas: cleaned };
         }
         if (id !== runId.current) return;
-        const imageUrl = cleaned.toDataURL("image/png");
+        let imageUrl = cleaned.toDataURL("image/png");
         if (!previous.result) setCleanUrl(imageUrl);
         const warmError = await warming;
         if (warmError) throw warmError;
         setStage("Reading your image");
         setProgress(25);
-        const data = await recognize(cleaned, s, (status, p) => {
+        const { canvas: readCanvas, ...data } = await recognize(cleaned, s, (status, p) => {
           if (id === runId.current && status === "recognizing text") {
             setStage("Reading your image");
             setProgress(25 + Math.round(p * 75));
           }
+          if (id === runId.current && status === "checking photo layout") setStage("Checking photo columns");
         });
         if (id !== runId.current) return;
+        cleaned = readCanvas;
+        imageUrl = cleaned.toDataURL("image/png");
         const value = outputText(data.text, s, mode);
         const next: EditorDocument = {
           text: value,

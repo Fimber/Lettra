@@ -1,4 +1,4 @@
-const CACHE = "lettra-v3-streaming";
+const CACHE = "lettra-v4-photo-layout";
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE).then((cache) => cache.addAll(["/", "/icon.svg"])),

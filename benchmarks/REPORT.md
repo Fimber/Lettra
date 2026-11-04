@@ -1,69 +1,65 @@
-# Lettra: 50-image accuracy and browser verification
+# Lettra: difficult-photo fix and frozen 50-image rerun
 
-Date: 3 November 2026. **All 50 images were measured in Auto before and after the accepted fixes.** The baseline also covers all five presets (250 extractions). A candidate run was stopped after 196 extractions when a photo-processing regression was confirmed; all 50 Auto cases were then rerun on the accepted build. That is 496 recorded extractions, excluding exploratory diagnostics. The four manual preset algorithms are unchanged: 156 candidate measurements and byte-for-byte input equivalence on all 50 images provide additional regression evidence. This is not a claim that all five final presets were rerun. Tests used the actual production UI on desktop Chrome, including normalization, preprocessing, OCR and the displayed cleanup result. Baseline is published v2; the corrected export is identified by its index and processor hashes in [comparison.json](results/comparison.json). Source HEAD in raw run metadata is only the checkout base, not proof of the served build.
+2026-11-04. All 50 original images were rerun through the production UI on desktop Chrome, in Auto/Fast English or each case's original language. Images, references, normalization and scoring are unchanged; every SHA-256 was rechecked. All 50 extractions completed, with zero browser errors and zero external network requests. This is not a physical-phone test.
 
-## Default Auto results
+## Results
 
-CER is character edit distance divided by reference length; lower is better. Mean CER weights each image equally. Pooled CER weights reference characters. Whitespace collapses and Unicode normalizes to NFC; case and punctuation are preserved. WER measures word edit distance. Numeric exactness requires every number token to match in order, including dates and identifiers; it is not a semantic amount check. Reader confidence is never used as ground truth.
+The 15 difficult photos improved from **65.51% to 37.25% mean character error**. 12/15 improved. 35/35 non-photo results match every previous metric exactly. Regressions: 0.
 
 | Category | Images | Before mean CER | After mean CER | After pooled CER | After mean WER | All numbers exact |
 |---|---:|---:|---:|---:|---:|---:|
-| clean_screenshots | 10 | 12.39% | 0.99% | 0.93% | 6.65% | 6/10 |
-| dark_screenshots | 5 | 0.77% | 0.66% | 0.70% | 4.82% | 4/5 |
+| clean_screenshots | 10 | 0.99% | 0.99% | 0.93% | 6.65% | 6/10 |
+| dark_screenshots | 5 | 0.66% | 0.66% | 0.70% | 4.82% | 4/5 |
 | signs_posters_slides | 7 | 0.07% | 0.07% | 0.07% | 0.40% | 6/6 |
-| non_english | 5 | 1.69% | 1.57% | 1.22% | 4.49% | 4/4 |
-| receipts | 8 | 13.21% | 12.74% | 13.23% | 37.58% | 0/8 |
-| phone-photos | 10 | 59.65% | 59.65% | 59.29% | 77.85% | 0/10 |
-| low-quality | 5 | 77.23% | 77.23% | 76.39% | 91.41% | 0/5 |
+| non_english | 5 | 1.57% | 1.57% | 1.22% | 4.49% | 4/4 |
+| receipts | 8 | 12.74% | 12.74% | 13.23% | 37.58% | 0/8 |
+| phone-photos | 10 | 59.65% | 35.87% | 34.81% | 59.87% | 0/10 |
+| low-quality | 5 | 77.23% | 40.01% | 38.95% | 62.95% | 0/5 |
 
-Clean screenshot target (<2% CER): 8/10 individual images meet it; category mean 0.99%. Phone-photo target (<8% CER): 0/10 individual images meet it; category mean 59.65%. These are explicit remaining acceptance gaps where targets are missed.
+CER is edit distance divided by reference characters; smaller is better. Means weight images equally. Whitespace collapses and Unicode normalizes to NFC, with case and punctuation retained. Numeric exactness requires all number tokens in the reference to match in order. OCR confidence is a selection heuristic, never the accuracy ground truth.
 
-Final Auto per-image errors and numeric comparisons are retained in [final.csv](results/final.csv), [baseline.jsonl](results/baseline.jsonl) and [comparison.json](results/comparison.json). Operational failures: before 0, after 0. Successful completion does not mean correct transcription.
+## Each difficult photo
 
-## Changes tested
+| Image | Before CER | After CER |
+|---|---:|---:|
+| phone-photo-01 | 69.25% | 25.79% |
+| phone-photo-02 | 53.74% | 18.62% |
+| phone-photo-03 | 53.31% | 12.86% |
+| phone-photo-04 | 78.22% | 59.67% |
+| phone-photo-05 | 78.90% | 78.90% |
+| phone-photo-06 | 68.31% | 38.50% |
+| phone-photo-07 | 27.79% | 27.79% |
+| phone-photo-08 | 9.21% | 9.21% |
+| phone-photo-09 | 100.00% | 64.31% |
+| phone-photo-10 | 57.78% | 23.09% |
+| low-quality-01 | 99.01% | 53.35% |
+| low-quality-02 | 50.51% | 11.67% |
+| low-quality-03 | 75.63% | 33.20% |
+| low-quality-04 | 61.01% | 35.33% |
+| low-quality-05 | 100.00% | 66.53% |
 
-- Replaced worker OffscreenCanvas usage with transferred pixel buffers. Windows WebKit 27.2 lacked OffscreenCanvas and previously failed before OCR; it now runs the same OpenCV pipeline.
-- Auto preserves antialiased light screenshot edges, retains binarization for dark screens, and keeps the previous adaptive photo cleanup. A proposed photo simplification was rejected after phone-photo-08 regressed from 9.21% to 75.76% CER. It keeps ordinary page segmentation, then retries row layout only for flat-background numeric content with an observed columnwise jump. Explicit layout choices remain respected.
-- Kept download anchors attached and blob URLs alive for 30 seconds, fixing the observed intermittent Firefox TXT download failure.
-- Started the same-origin OCR worker directly, removing an unnecessary blob/importScripts wrapper while investigating Firefox restart stalls. Offline cache writes now run in the background rather than delaying delivery of large reader assets; slow/rejected-write and offline-fallback tests cover this behavior.
-- Added a local /device-check/ page for real-device checks, cancellation/recovery, camera timing and downloadable JSON. Physical hardware declarations and hands-on checks default to unconfirmed. No photo or extracted camera text is included in reports.
-- Updated help for sideways, curved and multicolumn pages; crop one column or rotate and compare reruns. Complex photographs remain a known OCR limitation, not a solved acceptance target.
+Phone-photo target below 8% CER: 0/10 meet it. The target remains unmet overall. Severe curvature, perspective, weak print, reading order and small headings still need manual review. This patch aligns text; it does not flatten curved paper. Important names and numbers remain error-prone.
 
-## Regressions and tradeoffs
+## Changes verified
 
-- dark-04-terminal: 1.45% → 1.81% (+0.36 percentage points).
-- sroie-438: 1.42% → 1.57% (+0.16 percentage points).
+- Auto detects text direction from glyph-sized components and projection profiles, rather than desk edges. Rotation expands the canvas, preserving all image corners.
+- Local classic-engine orientation detection resolves upside-down and sideways Latin-script pages using already bundled data. The detector is released after use.
+- Pixel-derived text regions separate columns and rejoin vertically separated paragraphs before reading them. No reference transcript, document template or filename influences recognition.
+- The corrected reading competes with the existing full-page reading using confident character evidence. Stronger existing results can be retained. The chosen image and word boxes share coordinates, and user edits still require comparison before replacement.
+- Screenshot, receipt, manual preset and original-image processing retain their existing behavior. The service-worker cache version changes so clients receive the new helper.
 
-These two small per-image increases are accepted as a preprocessing tradeoff: both remain below 2% CER, their category means improve, and no category mean worsens. The much larger camera-page regression was rejected. This is a tuning set, not an independent held-out evaluation; thresholds were adjusted after baseline results. No reference transcript or selected image was changed in response to OCR output. A new held-out corpus is needed before making general accuracy claims.
+Automatic paper cropping and an alternative Hough detector were rejected after visual checks found clipped text or column-direction mistakes. The same-session interrupted run stopped after an overnight environment pause; it is excluded from these final figures.
 
-## What the 50 images cover
+## Evidence and limits
 
-- 10 clean and 5 dark browser screenshots, 7 designed posters/slides, and 5 non-English screenshots are independently authored, controlled local browser renders. They are not captured third-party applications or photographed street signs. Languages: French, Yoruba, Spanish, German, Portuguese; Igbo and Hausa remain unsupported.
-- 8 real scanned receipts from [SROIE](https://github.com/zzzDavid/ICDAR-2019-SROIE), pinned commit in [receipt-sources.json](receipt-sources.json). References were visually corrected for actual case and released annotation mistakes before scoring. Two exterior handwritten dataset identifiers were cropped away, with original hashes and geometry retained. Very faint or clipped glyphs have single-reviewer uncertainty recorded in the manifest. Repository license is retained; this report makes no broader dataset ownership claim.
-- 10 ordinary camera captures and 5 difficult captures from [DocPTBench](https://huggingface.co/datasets/topdu/DocPTBench), all different Federal Register pages and EXIF Huawei JAD-AL50 photographs. References come from exact official [GovInfo PDFs](https://www.govinfo.gov/app/collection/FR), using native text objects rather than OCR and matching visible page reading order. Low-quality cases cover creases, shadows, backlighting and rotation; motion blur is not claimed. Two ordinary captures are sideways. This is a narrow, difficult, mostly three-column document set from one camera model, not a representative phone market sample. See [photo provenance](PHOTO-PROVENANCE.md) and [photo-sources.json](photo-sources.json).
+- [Per-image final CSV](results/final.csv), [raw final metrics](results/final.jsonl), [v3 baseline](results/v3-auto.jsonl), [comparison and tested export hashes](results/photo-comparison.json).
+- The browser run includes image normalization, preprocessing, recognition and displayed cleanup. Source HEAD in run metadata is the checkout base; exported index, processor and photo-helper hashes identify the tested build.
+- Photo correction adds an orientation worker and a second OCR path. Desktop timings are in the CSV. Phone memory, latency and physical-device camera behavior have not been verified.
+- The corpus is a development regression set used while designing this correction, not an independent held-out accuracy study. Its 15 photographs are difficult printed pages; see [photo provenance](PHOTO-PROVENANCE.md). No claim covers handwriting or all camera conditions.
+- [Previous verification report](REPORT-v3.md) retains the earlier 50-image/preset history and physical-device limitations.
 
-All 50 references are committed under references/, with image and truth SHA-256 hashes in [corpus.json](corpus.json). Raw images and PDFs stay outside the deployed application. Ground truth has one visual review, not independent double transcription. Reading-order, line-end hyphenation, punctuation and table-layout differences contribute to reported errors.
+## Workflow verification
 
-## Browser and physical-device evidence
+43 unit tests, 13 workspace checks, and three orientation cancellation/fallback checks passed. Chrome, Firefox and Windows WebKit passed the oblique-photo workflow, selected-word overlay, editing/undo, and 390px viewport overflow checks. Chrome also passed offline rereading and comparison. These are desktop browser engines, not physical phones. [Recorded checks](results/photo-ui.json).
 
-The final local build passed 39 unit checks and 41 existing end-to-end browser checks. 156/156 completed manual-preset comparisons have identical metrics to baseline, and all 50 preprocessing input buffers match byte-for-byte. During parallel testing, some browser startups and repeated accessibility-tree polling stalled; the device-check harness was changed to DOM readiness polling and rerun on its own. The final results below are from that completed run.
-
-- firefox 157.0: passed; 6 browser-flow checks; physical phone = false.
-- webkit 27.2: passed; 6 browser-flow checks; physical phone = false.
-- Device-check page on chrome: passed; 7 automatic checks; physical phone = false.
-- Device-check page on firefox: passed; 7 automatic checks; physical phone = false.
-- Device-check page on webkit: passed; 7 automatic checks; physical phone = false.
-
-**Real Android and iPhone tests were not run.** No connected phone or BrowserStack/Sauce Labs account was available. A 390-pixel touch viewport and the Windows WebKit engine do not establish iPhone Safari, Android hardware, camera capture, mobile memory, soft keyboard, background-tab recovery or real-device performance. Their status remains NOT RUN.
-
-To finish: open /device-check/ while signed into the private site on an actual Android Chrome and iPhone Safari. Identify the phone, run automatic checks, try a camera image, perform each hands-on task in the main workspace, and download the JSON report. Return failures with the device model and browser version. Nothing is submitted automatically.
-
-Timings in CSV are diagnostic: independent suites overlapped on one Windows computer. They are not certified warm-laptop or real-phone speed measurements. The 15-second Android target and the first-load 8 MB target are not established; the OpenCV bundle alone is 13.3 MB before HTTP compression, and compressed first-read transfer size was not verified.
-
-## Reproduce
-
-1. Run npm ci, node scripts/make-screen-corpus.mjs, node scripts/fetch-receipt-corpus.mjs, and node scripts/fetch-photo-corpus.mjs. Photo references are already committed; PDFs and page indices are recorded for audit. Generated screenshot hashes can depend on installed fonts/Chrome; inspect rather than silently replacing a mismatched frozen input.
-2. Build with npm run build and start npm start. Run node scripts/accuracy-benchmark.mjs benchmarks/corpus.json test-results/accuracy. It validates every image and transcript hash before recognition. LETTRA_URL selects another local export; LETTRA_VARIANTS or LETTRA_CASES narrow diagnostics.
-3. Install Playwright Firefox/WebKit into .sites-runtime/browsers, then run node scripts/cross-browser-smoke.mjs and node scripts/device-check-smoke.mjs. Run npm test and the three existing smoke scripts for editor, offline, clipboard, cancellation and mobile-width checks.
-
-Do not label an emulated or desktop-engine run as a physical-phone pass.
+The single cross-browser photo was low-quality-05: CER was 66.53% in Chrome, 56.34% in Firefox, and 80.42% in WebKit. Functional passes do not certify transcription accuracy. Only Chrome ran the full 50-image accuracy set.
